@@ -35,13 +35,13 @@ const ExperienceCard = ({ experience }) => {
       <div>
         <h3 className='text-white text-[24px] font-bold'>{experience.title}</h3>
         <div>
-        <p
-          className='text-secondary text-[16px] font-semibold'
-          style={{ margin: 0 }}
-        >
-          {experience.company_name}
-        </p>
-        <a className='text-secondary text-[12px] underline' href="https://www.caughtup.app/">https://www.caughtup.app</a>
+          <p
+            className='text-secondary text-[16px] font-semibold'
+            style={{ margin: 0 }}
+          >
+            {experience.company_name}
+          </p>
+          <a className='text-secondary text-[12px] underline' href={experience.website}>{experience.website}</a>
         </div>
       </div>
 
