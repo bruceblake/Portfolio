@@ -49,9 +49,13 @@ function App() {
       />
       
       <main className="main-container">
-        <div className="content-wrapper">
-          {mode === 'chat' ? <ChatInterface /> : <Timeline />}
-        </div>
+        {mode === 'chat' ? (
+          <ChatInterface />
+        ) : (
+          <div className="content-wrapper">
+            <Timeline />
+          </div>
+        )}
       </main>
     </div>
   );
