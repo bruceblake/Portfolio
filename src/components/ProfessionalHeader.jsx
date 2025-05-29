@@ -1,60 +1,89 @@
-import React from 'react';
-import { Download, Moon, Sun, Mail, Github, Linkedin, Home, MessageSquare, Clock } from 'lucide-react';
+import React, { useState, useEffect } from 'react';
+import { Download, Moon, Sun, Mail, Github, Linkedin, Menu, X } from 'lucide-react';
 import './ProfessionalHeader.css';
 
-const ProfessionalHeader = ({ theme, toggleTheme, onBackToLanding, onSwitchMode, currentMode }) => {
+const ProfessionalHeader = ({ portfolioData }) => {
+  const [theme, setTheme] = useState('light');
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const [activeSection, setActiveSection] = useState('hero');
+
+  useEffect(() => {
+    const savedTheme = localStorage.getItem('theme') || 'light';
+    setTheme(savedTheme);
+    document.documentElement.setAttribute('data-theme', savedTheme);
+  }, []);
+
+  useEffect(() => {
+    const handleScroll = () => {
+      const sections = ['hero', 'about', 'experience', 'projects', 'skills', 'education', 'accomplishments', 'contact'];
+      const scrollPosition = window.scrollY + 100;
+
+      for (const section of sections) {
+        const element = document.getElementById(section);
+        if (element) {
+          const { offsetTop, offsetHeight } = element;
+          if (scrollPosition >= offsetTop && scrollPosition < offsetTop + offsetHeight) {
+            setActiveSection(section);
+            break;
+          }
+        }
+      }
+    };
+
+    window.addEventListener('scroll', handleScroll);
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
+
+  const toggleTheme = () => {
+    const newTheme = theme === 'light' ? 'dark' : 'light';
+    setTheme(newTheme);
+    document.documentElement.setAttribute('data-theme', newTheme);
+    localStorage.setItem('theme', newTheme);
+  };
+
   const handleDownload = () => {
-    // Create a link to download the resume
     const link = document.createElement('a');
-    link.href = `${import.meta.env.BASE_URL}Bruce_Blake_Resume.pdf`;
+    link.href = '/Bruce_Blake_Resume.pdf';
     link.download = 'Bruce_Blake_Resume.pdf';
     document.body.appendChild(link);
     link.click();
     document.body.removeChild(link);
   };
 
+  const navItems = [
+    { id: 'hero', label: 'Home' },
+    { id: 'about', label: 'About' },
+    { id: 'experience', label: 'Experience' },
+    { id: 'projects', label: 'Projects' },
+    { id: 'skills', label: 'Skills' },
+    { id: 'education', label: 'Education' },
+    { id: 'accomplishments', label: 'Awards' },
+    { id: 'contact', label: 'Contact' }
+  ];
+
   return (
     <header className="professional-header">
       <div className="header-container">
         <div className="header-left">
-          <h1 className="header-name">Bruce Blake</h1>
-          <p className="header-tagline">Software Engineer • 2x Google Intern • Virginia Tech</p>
+          <h1 className="header-name">{portfolioData?.personal?.name || 'Bruce Blake'}</h1>
+          <p className="header-tagline">{portfolioData?.personal?.title || 'Software Engineer'}</p>
         </div>
         
+        <nav className="header-nav desktop-nav">
+          {navItems.map(item => (
+            <a
+              key={item.id}
+              href={`#${item.id}`}
+              className={`nav-link ${activeSection === item.id ? 'active' : ''}`}
+              onClick={() => setMobileMenuOpen(false)}
+            >
+              {item.label}
+            </a>
+          ))}
+        </nav>
+        
         <div className="header-right">
-          <div className="contact-links">
-            <a href="mailto:bruceblake@vt.edu" className="contact-link" title="Email">
-              <Mail size={18} />
-            </a>
-            <a href="https://github.com/bruceblake" className="contact-link" target="_blank" rel="noopener noreferrer" title="GitHub">
-              <Github size={18} />
-            </a>
-            <a href="https://linkedin.com/in/bruceblake" className="contact-link" target="_blank" rel="noopener noreferrer" title="LinkedIn">
-              <Linkedin size={18} />
-            </a>
-          </div>
-          
           <div className="header-actions">
-            {onBackToLanding && (
-              <>
-                <button onClick={onBackToLanding} className="header-btn header-btn--nav" title="Home">
-                  <Home size={16} />
-                  <span>Home</span>
-                </button>
-                
-                {currentMode && onSwitchMode && (
-                  <button 
-                    onClick={onSwitchMode} 
-                    className="header-btn header-btn--nav header-btn--switch"
-                    title={currentMode === 'chat' ? 'Switch to Timeline' : 'Switch to Chat'}
-                  >
-                    {currentMode === 'chat' ? <Clock size={16} /> : <MessageSquare size={16} />}
-                    <span>{currentMode === 'chat' ? 'Timeline' : 'Chat'}</span>
-                  </button>
-                )}
-              </>
-            )}
-            
             <button onClick={handleDownload} className="header-btn header-btn--download">
               <Download size={16} />
               <span>Resume</span>
@@ -63,9 +92,32 @@ const ProfessionalHeader = ({ theme, toggleTheme, onBackToLanding, onSwitchMode,
             <button onClick={toggleTheme} className="header-btn header-btn--theme" aria-label="Toggle theme">
               {theme === 'light' ? <Moon size={16} /> : <Sun size={16} />}
             </button>
+            
+            <button 
+              className="mobile-menu-toggle"
+              onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+              aria-label="Toggle menu"
+            >
+              {mobileMenuOpen ? <X size={24} /> : <Menu size={24} />}
+            </button>
           </div>
         </div>
       </div>
+      
+      {mobileMenuOpen && (
+        <nav className="mobile-nav">
+          {navItems.map(item => (
+            <a
+              key={item.id}
+              href={`#${item.id}`}
+              className={`nav-link ${activeSection === item.id ? 'active' : ''}`}
+              onClick={() => setMobileMenuOpen(false)}
+            >
+              {item.label}
+            </a>
+          ))}
+        </nav>
+      )}
     </header>
   );
 };

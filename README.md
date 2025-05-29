@@ -1,24 +1,25 @@
 # Bruce Blake's Portfolio
 
-A modern, interactive portfolio featuring an AI chat assistant and visual timeline of experience.
+A modern, responsive portfolio website built with React and Vite, showcasing professional experience, projects, skills, and accomplishments.
 
 🔗 **Live Demo**: [https://bruceblake.github.io/Portfolio/](https://bruceblake.github.io/Portfolio/)
 
 ## Features
 
-- 🤖 **Interactive AI Chat** - Ask questions about my experience, skills, and projects
-- 📊 **Visual Timeline** - Explore my journey through an animated timeline
-- 🎨 **Beautiful Animations** - Smooth transitions and engaging UI
-- 🌓 **Dark/Light Theme** - Toggle between themes
-- 📱 **Fully Responsive** - Works on all devices
-- ⚡ **Fast & Static** - No backend required, works on GitHub Pages
+- 📱 **Fully Responsive** - Optimized for all devices and screen sizes
+- 🌓 **Dark/Light Theme** - Toggle between themes with persistent preference
+- 🎨 **Modern Design** - Clean, professional UI with smooth animations
+- ⚡ **Fast Performance** - Built with Vite for optimal loading speed
+- 📊 **Dynamic Sections** - Experience, Projects, Skills, Education, and more
+- 🔄 **Smooth Navigation** - Scrollspy navigation with active section highlighting
 
 ## Tech Stack
 
-- **Frontend**: React, Vite, Framer Motion
-- **Styling**: CSS Modules, Responsive Design
-- **Chat**: Intelligent keyword-based responses
-- **Deployment**: GitHub Pages, GitHub Actions
+- **Frontend**: React, Vite
+- **Styling**: CSS3 with CSS Variables
+- **Icons**: Lucide React
+- **Build Tool**: Vite
+- **Deployment**: GitHub Pages
 
 ## Local Development
 
@@ -38,16 +39,18 @@ npm run build
 ```
 src/
 ├── components/          # React components
-│   ├── LandingPage      # Initial selection screen
-│   ├── ChatInterface    # AI chat component
-│   ├── Timeline         # Visual timeline
-│   ├── ProfessionalHeader # Navigation header
-│   └── QuickStats       # Stats display cards
-├── utils/               # Helper functions
-│   └── chatResponses    # Static chat responses
+│   ├── ProfessionalHeader # Navigation header with theme toggle
+│   ├── Hero             # Landing section with CTA
+│   ├── About            # Personal summary and interests
+│   ├── Experience       # Work experience timeline
+│   ├── Projects         # Featured and other projects
+│   ├── Skills           # Technical skills by category
+│   ├── Education        # Academic background
+│   ├── Accomplishments  # Awards and achievements
+│   └── Contact          # Contact information
 ├── App.jsx              # Main app component
 ├── App.css              # App-level styles
-├── index.css            # Global styles
+├── index.css            # Global styles and theme variables
 └── main.jsx             # Entry point
 ```
 

@@ -364,6 +364,14 @@ code {
   --background: var(--bg-primary);
   --surface: var(--bg-card);
   --border: var(--border-color);
+  --radius-full: 9999px;
+  --accent-light: #E4D3BC;
+  --primary-light: #8B7BAE;
+}
+
+/* Smooth scrolling */
+html {
+  scroll-behavior: smooth;
 }
 
 /* Professional Header */
