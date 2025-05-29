@@ -1,0 +1,69 @@
+{
+  "RedBarSushiAI": {
+    "demo_url": "https://demo.redbarsushi.ai",
+    "screenshots": [
+      "/images/redbar-dashboard.png",
+      "/images/redbar-ordering.png",
+      "/images/redbar-analytics.png"
+    ],
+    "video_url": "https://www.youtube.com/embed/demo-video-id",
+    "metrics": {
+      "orders_processed": "50,000+",
+      "revenue_generated": "$250,000+",
+      "accuracy_rate": "95%",
+      "response_time": "<2s"
+    },
+    "live_stats": {
+      "daily_orders": 500,
+      "active_users": 1200,
+      "uptime": "99.9%"
+    }
+  },
+  "3D Physics Game Engine": {
+    "demo_url": "https://github.com/bruceblake/game-engine-demo",
+    "screenshots": [
+      "/images/engine-physics.gif",
+      "/images/engine-multiplayer.png",
+      "/images/engine-editor.png"
+    ],
+    "video_url": "https://www.youtube.com/embed/engine-demo-id",
+    "features": [
+      "Real-time physics simulation",
+      "Multiplayer support (100+ concurrent)",
+      "Custom shader pipeline",
+      "Level editor"
+    ],
+    "performance": {
+      "fps": "60+ FPS",
+      "players": "100+ concurrent",
+      "latency": "<50ms"
+    }
+  },
+  "AI Voice Ordering System": {
+    "demo_url": "https://vocode-demo.example.com",
+    "screenshots": [
+      "/images/vocode-interface.png",
+      "/images/vocode-flow.png"
+    ],
+    "architecture": "/images/vocode-architecture.svg",
+    "integrations": [
+      "OpenAI GPT-4",
+      "Vocode SDK",
+      "Twilio",
+      "PostgreSQL"
+    ]
+  },
+  "Portfolio Website": {
+    "demo_url": "https://bruceblake.dev",
+    "screenshots": [
+      "/images/portfolio-home.png",
+      "/images/portfolio-timeline.png"
+    ],
+    "lighthouse_scores": {
+      "performance": 98,
+      "accessibility": 100,
+      "best_practices": 100,
+      "seo": 100
+    }
+  }
+}

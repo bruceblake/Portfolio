@@ -1,12 +1,9 @@
 import { useState, useEffect } from 'react';
 import ProfessionalHeader from './components/ProfessionalHeader';
 import Hero from './components/Hero';
+import Timeline from './components/Timeline';
 import About from './components/About';
-import Experience from './components/Experience';
-import Projects from './components/Projects';
 import Skills from './components/Skills';
-import Education from './components/Education';
-import Accomplishments from './components/Accomplishments';
 import Contact from './components/Contact';
 import './App.css';
 
@@ -68,12 +65,9 @@ function App() {
       <ProfessionalHeader portfolioData={portfolioData} />
       <main className="main-content">
         <Hero portfolioData={portfolioData} />
+        <Timeline portfolioData={portfolioData} />
         <About portfolioData={portfolioData} />
-        <Experience portfolioData={portfolioData} />
-        <Projects portfolioData={portfolioData} />
         <Skills portfolioData={portfolioData} />
-        <Education portfolioData={portfolioData} />
-        <Accomplishments portfolioData={portfolioData} />
         <Contact portfolioData={portfolioData} />
       </main>
     </div>
