@@ -4,9 +4,9 @@ import { motion } from 'framer-motion';
 const QuickStats = () => {
   const stats = [
     { label: 'GitHub Repos', value: '50+', detail: 'Active open source projects' },
-    { label: 'Companies', value: '3', detail: 'Google (2x) + Freelance' },
-    { label: 'Projects Built', value: '7+', detail: 'From game engines to AI' },
-    { label: 'Tech Skills', value: '25+', detail: 'Languages & frameworks' }
+    { label: 'Companies', value: '3', detail: 'Google (2x) + Red Bar Sushi' },
+    { label: 'Projects Built', value: '5+', detail: 'Game engines, iOS apps, AI tools' },
+    { label: 'Tech Skills', value: '35+', detail: '10 languages, 25+ frameworks/tools' }
   ];
 
   return (

@@ -31,10 +31,11 @@
 
 .timeline-item {
   position: relative;
-  margin-bottom: 3rem;
+  margin-bottom: 4rem;
   display: flex;
-  align-items: center;
+  align-items: flex-start;
   justify-content: center;
+  gap: 2rem;
 }
 
 .timeline-item:nth-child(odd) {
@@ -61,10 +62,11 @@
 }
 
 .timeline-content {
-  width: 45%;
+  width: 42%;
+  max-width: 500px;
   background: var(--surface);
   border: 1px solid var(--border);
-  border-radius: 8px;
+  border-radius: 12px;
   padding: 2rem;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
   transition: all 0.3s ease;

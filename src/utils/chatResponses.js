@@ -4,7 +4,7 @@
 const portfolioData = {
   experience: {
     google: {
-      keywords: ['google', 'intern', 'internship', 'step', 'geo', 'platform'],
+      keywords: ["google", "intern", "internship", "step", "geo", "platform"],
       response: `**Bruce is a 2x Google STEP intern with proven impact on millions of users.**
 
 ## Google Experience
@@ -23,11 +23,19 @@ const portfolioData = {
 • Worked with **Java, TypeScript, Angular, and SQL**
 • Received **excellent performance review** and return offer
 
-The Google STEP program has **less than 3% acceptance rate**, highlighting Bruce's exceptional capabilities.`
+The Google STEP program has **less than 3% acceptance rate**, highlighting Bruce's exceptional capabilities.`,
     },
-    
+
     entrepreneurial: {
-      keywords: ['entrepreneur', 'business', 'revenue', 'startup', 'freelance', 'red bar', 'sushi'],
+      keywords: [
+        "entrepreneur",
+        "business",
+        "revenue",
+        "startup",
+        "freelance",
+        "red bar",
+        "sushi",
+      ],
       response: `**Bruce generated $15K+ revenue building AI solutions for real businesses.**
 
 ## Entrepreneurial & Freelance Success
@@ -51,13 +59,23 @@ This project demonstrates Bruce's ability to:
 - Identify real business problems
 - Build complete, production-ready solutions
 - Generate measurable revenue impact
-- Work directly with clients to deliver value`
-    }
+- Work directly with clients to deliver value`,
+    },
   },
-  
+
   skills: {
     languages: {
-      keywords: ['language', 'programming', 'code', 'coding', 'python', 'javascript', 'c++', 'java', 'swift'],
+      keywords: [
+        "language",
+        "programming",
+        "code",
+        "coding",
+        "python",
+        "javascript",
+        "c++",
+        "java",
+        "swift",
+      ],
       response: `**Bruce is proficient in 10+ programming languages with expertise across the stack.**
 
 ## Programming Languages
@@ -83,11 +101,11 @@ This project demonstrates Bruce's ability to:
 ### **Databases**
 • PostgreSQL, MySQL, Firebase, Redis, MongoDB
 
-Bruce's language expertise spans from low-level C++ to high-level web frameworks.`
+Bruce's language expertise spans from low-level C++ to high-level web frameworks.`,
     },
-    
+
     technical: {
-      keywords: ['tech', 'stack', 'framework', 'tool', 'skill', 'technology'],
+      keywords: ["tech", "stack", "framework", "tool", "skill", "technology"],
       response: `**Bruce has comprehensive technical skills spanning full-stack development to AI/ML.**
 
 ## Technical Expertise
@@ -116,13 +134,23 @@ Bruce's language expertise spans from low-level C++ to high-level web frameworks
 • 3D Graphics programming (OpenGL/WebGL)
 • Game engine development (C++)
 • Mobile development (React Native, Android)
-• Real-time systems and WebSockets`
-    }
+• Real-time systems and WebSockets`,
+    },
   },
-  
+
   projects: {
     general: {
-      keywords: ['project', 'built', 'created', 'developed', 'work', 'portfolio', 'physics', 'game', 'ios'],
+      keywords: [
+        "project",
+        "built",
+        "created",
+        "developed",
+        "work",
+        "portfolio",
+        "physics",
+        "game",
+        "ios",
+      ],
       response: `**Bruce has built impressive projects from game engines to AI applications.**
 
 ## Featured Projects
@@ -153,12 +181,21 @@ Bruce's language expertise spans from low-level C++ to high-level web frameworks
 • **Real-time WebSocket** progress streaming
 • Mask-based inpainting for precise edits
 
-Each project demonstrates deep technical understanding and practical implementation.`
-    }
+Each project demonstrates deep technical understanding and practical implementation.`,
+    },
   },
-  
+
   education: {
-    keywords: ['education', 'school', 'virginia tech', 'vt', 'gpa', 'degree', 'study', 'graduation'],
+    keywords: [
+      "education",
+      "school",
+      "virginia tech",
+      "vt",
+      "gpa",
+      "degree",
+      "study",
+      "graduation",
+    ],
     response: `**Bruce has a 3.85 GPA at Virginia Tech, graduating May 2026 with Computer Engineering degree.**
 
 ## Education
@@ -188,11 +225,20 @@ Each project demonstrates deep technical understanding and practical implementat
 • Active in hackathon community
 • Combining hardware and software expertise
 
-Bruce excels academically while gaining real-world experience through internships and projects.`
+Bruce excels academically while gaining real-world experience through internships and projects.`,
   },
-  
+
   strengths: {
-    keywords: ['strength', 'why', 'hire', 'stand out', 'unique', 'best', 'candidate', 'special'],
+    keywords: [
+      "strength",
+      "why",
+      "hire",
+      "stand out",
+      "unique",
+      "best",
+      "candidate",
+      "special",
+    ],
     response: `**Bruce offers a unique combination: builds from first principles while delivering business impact.**
 
 ## Why Bruce Stands Out
@@ -224,11 +270,11 @@ Bruce excels academically while gaining real-world experience through internship
 ### **⚡ Philosophy**
 *"I believe in understanding technology from first principles. Whether building a physics engine or a distributed system, I start with the fundamentals and build up."*
 
-Bruce delivers both technical excellence and measurable business value.`
+Bruce delivers both technical excellence and measurable business value.`,
   },
-  
+
   contact: {
-    keywords: ['contact', 'email', 'reach', 'connect', 'linkedin', 'github'],
+    keywords: ["contact", "email", "reach", "connect", "linkedin", "github"],
     response: `**Here's how to connect with Bruce:**
 
 ## Contact Information
@@ -244,7 +290,7 @@ Bruce delivers both technical excellence and measurable business value.`
 
 ### **🐙 GitHub**
 [github.com/bruceblake](https://github.com/bruceblake)
-• 50+ public repositories
+• 20+ public repositories
 • Active open source contributor
 • Portfolio projects available
 
@@ -259,9 +305,9 @@ Bruce delivers both technical excellence and measurable business value.`
 • Flexible schedule for interviews
 • EST timezone (UTC-5)
 
-Feel free to reach out - Bruce typically responds within 24 hours!`
+Feel free to reach out - Bruce typically responds within 24 hours!`,
   },
-  
+
   general: {
     keywords: [],
     response: `**I'm here to help you learn about Bruce Blake, a software engineer with deep technical skills and proven business impact.**
@@ -291,23 +337,25 @@ Feel free to reach out - Bruce typically responds within 24 hours!`
 • "Show me his most impressive technical projects"
 • "What's his experience with AI and machine learning?"
 
-What aspect of Bruce's background interests you most?`
-  }
+What aspect of Bruce's background interests you most?`,
+  },
 };
 
 // Function to find the best matching response
 export function getResponse(message) {
   const lowercaseMessage = message.toLowerCase();
-  
+
   // Check each category for keyword matches
   for (const category of Object.values(portfolioData)) {
     for (const topic of Object.values(category)) {
-      if (topic.keywords.some(keyword => lowercaseMessage.includes(keyword))) {
+      if (
+        topic.keywords.some((keyword) => lowercaseMessage.includes(keyword))
+      ) {
         return topic.response;
       }
     }
   }
-  
+
   // Default response if no keywords match
   return portfolioData.general.keywords.response;
 }
@@ -317,5 +365,5 @@ export function getTypingDelay(message) {
   // Base delay + additional time based on message length
   const baseDelay = 500;
   const charDelay = 5; // ms per character
-  return baseDelay + (message.length * charDelay);
+  return baseDelay + message.length * charDelay;
 }
