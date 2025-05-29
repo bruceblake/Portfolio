@@ -88,6 +88,16 @@ const Contact = ({ portfolioData }) => {
             </a>
           </div>
         </div>
+        
+        <div className="contact-footer">
+          <p className="footer-text">© 2024 Bruce Blake. All rights reserved.</p>
+          <div className="footer-links">
+            <a href="/privacy" className="footer-link">Privacy Policy</a>
+            <a href="/terms" className="footer-link">Terms of Service</a>
+            <a href="#hero" className="footer-link">Back to Top ↑</a>
+          </div>
+          <p className="footer-text">Built with React, TypeScript, and ❤️</p>
+        </div>
       </div>
     </section>
   );

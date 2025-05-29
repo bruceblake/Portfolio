@@ -11,10 +11,17 @@ const Timeline = ({ portfolioData }) => {
   
   // Helper function to check if item involves primary skills
   const involvesPrimarySkills = (technologies) => {
-    if (!technologies) return false;
-    const techLower = technologies.map(t => t.toLowerCase());
+    if (!technologies || !Array.isArray(technologies)) return false;
+    const techLower = technologies.map(t => t.toString().toLowerCase());
     return primarySkills.some(skill => 
-      techLower.some(tech => tech.includes(skill.toLowerCase()))
+      techLower.some(tech => 
+        tech.includes(skill.toLowerCase()) || 
+        (skill === 'TypeScript' && tech.includes('typescript')) ||
+        (skill === 'React' && (tech.includes('react') || tech.includes('next'))) ||
+        (skill === 'Angular' && tech.includes('angular')) ||
+        (skill === 'Java' && tech.includes('java')) ||
+        (skill === 'Python' && tech.includes('python'))
+      )
     );
   };
 
@@ -23,88 +30,86 @@ const Timeline = ({ portfolioData }) => {
     const items = [];
 
     // Add experiences
-    if (portfolioData.experience_professional) {
-      portfolioData.experience_professional.forEach(exp => {
+    if (portfolioData.experience) {
+      portfolioData.experience.forEach(exp => {
         const startDate = new Date(exp.duration.start);
         items.push({
-          id: `exp-${exp.company_name}-${startDate.getTime()}`,
+          id: `exp-${exp.company}-${startDate.getTime()}`,
           type: 'experience',
           date: startDate,
           endDate: exp.duration.end === 'Present' ? new Date() : new Date(exp.duration.end),
-          title: exp.position_title,
-          subtitle: exp.company_name,
+          title: exp.title,
+          subtitle: exp.company,
           location: exp.location,
-          description: exp.description_brief,
-          details: exp.key_achievements_quantified,
-          technologies: exp.technologies_used,
+          description: exp.description,
+          details: exp.responsibilities || exp.keyAchievements || exp.anticipatedResponsibilities || [],
+          technologies: exp.technologies || [],
           icon: '💼'
         });
       });
     }
 
     // Add education
-    if (portfolioData.education_details) {
-      portfolioData.education_details.forEach(edu => {
-        const startDate = new Date(edu.startDate || '2022-08-01');
+    if (portfolioData.education) {
+      portfolioData.education.forEach(edu => {
+        const startDate = new Date('2022-08-01'); // Default start date for education
+        const endDate = new Date('2026-05-01'); // Parse from graduationDate
         items.push({
-          id: `edu-${edu.institution_name}`,
+          id: `edu-${edu.institution}`,
           type: 'education',
           date: startDate,
-          endDate: new Date(edu.endDate || edu.graduation_date_actual_or_expected),
-          title: edu.degree_obtained,
-          subtitle: edu.institution_name,
-          location: edu.location_city_state,
-          description: `${edu.minor_subject ? 'Minor: ' + edu.minor_subject + ' | ' : ''}GPA: ${edu.gpa_in_major}`,
-          details: edu.relevant_coursework_detailed,
+          endDate: endDate,
+          title: edu.degree,
+          subtitle: edu.institution,
+          location: edu.location,
+          description: `${edu.minor ? 'Minor: ' + edu.minor + ' | ' : ''}${edu.gpaDetails || ''}`,
+          details: edu.relevantCoursework || [],
           icon: '🎓'
         });
       });
     }
 
     // Add projects with estimated dates
-    if (portfolioData.projects_significant) {
-      portfolioData.projects_significant.forEach((proj, index) => {
+    if (portfolioData.technicalProjects) {
+      portfolioData.technicalProjects.forEach((proj, index) => {
         // Estimate project dates based on context or use placeholder
         let projectDate = new Date();
-        if (proj.project_name.includes('RedBarSushiAI')) {
-          projectDate = new Date('2024-06-01');
-        } else if (proj.project_name.includes('Vocode')) {
-          projectDate = new Date('2024-08-01');
-        } else if (proj.project_name.includes('Game Engine')) {
+        if (proj.name.includes('3D Physics Engine')) {
           projectDate = new Date('2023-09-01');
+        } else if (proj.name.includes('Portfolio')) {
+          projectDate = new Date('2024-10-01');
         } else {
           projectDate = new Date(2024 - index, 0, 1);
         }
 
         items.push({
-          id: `proj-${proj.project_name}`,
+          id: `proj-${proj.name}`,
           type: 'project',
           date: projectDate,
           endDate: proj.status?.includes('Active') ? new Date() : projectDate,
-          title: proj.project_name,
-          subtitle: proj.project_category || 'Personal Project',
-          description: proj.brief_description,
-          details: proj.detailed_accomplishments,
-          technologies: proj.technologies_used,
-          links: proj.links,
-          impact: proj.quantified_impact,
+          title: proj.name,
+          subtitle: proj.category || 'Personal Project',
+          description: proj.description,
+          details: proj.technicalHighlights || [],
+          technologies: proj.technologies || [],
+          links: proj.links || {},
           icon: '🚀'
         });
       });
     }
 
     // Add teams and accomplishments
-    if (portfolioData.teams_and_accomplishments) {
-      portfolioData.teams_and_accomplishments.forEach(item => {
+    if (portfolioData.teamsAndAccomplishments) {
+      portfolioData.teamsAndAccomplishments.forEach(item => {
         const itemDate = item.date ? new Date(item.date) : new Date(item.duration?.start || '2023-01-01');
         items.push({
-          id: `team-${item.team_or_event_name}`,
+          id: `team-${item.name}`,
           type: 'accomplishment',
           date: itemDate,
           endDate: item.duration?.end ? new Date(item.duration.end) : itemDate,
-          title: item.team_or_event_name,
+          title: item.name,
           subtitle: item.role || 'Achievement',
-          description: item.achievement_or_contribution,
+          description: item.achievement,
           details: item.details || [],
           icon: '🏆'
         });
@@ -120,6 +125,8 @@ const Timeline = ({ portfolioData }) => {
   // Filter items based on selected category
   const filteredItems = filter === 'all' 
     ? timelineItems 
+    : filter === 'featured'
+    ? timelineItems.filter(item => involvesPrimarySkills(item.technologies))
     : timelineItems.filter(item => item.type === filter);
 
   // Intersection Observer for animations
@@ -168,30 +175,42 @@ const Timeline = ({ portfolioData }) => {
             onClick={() => setFilter('all')}
           >
             All
+            <span className="filter-count">{timelineItems.length}</span>
           </button>
           <button 
             className={`filter-btn ${filter === 'experience' ? 'active' : ''}`}
             onClick={() => setFilter('experience')}
           >
             💼 Experience
+            <span className="filter-count">{timelineItems.filter(item => item.type === 'experience').length}</span>
           </button>
           <button 
             className={`filter-btn ${filter === 'education' ? 'active' : ''}`}
             onClick={() => setFilter('education')}
           >
             🎓 Education
+            <span className="filter-count">{timelineItems.filter(item => item.type === 'education').length}</span>
           </button>
           <button 
             className={`filter-btn ${filter === 'project' ? 'active' : ''}`}
             onClick={() => setFilter('project')}
           >
             🚀 Projects
+            <span className="filter-count">{timelineItems.filter(item => item.type === 'project').length}</span>
           </button>
           <button 
             className={`filter-btn ${filter === 'accomplishment' ? 'active' : ''}`}
             onClick={() => setFilter('accomplishment')}
           >
             🏆 Achievements
+            <span className="filter-count">{timelineItems.filter(item => item.type === 'accomplishment').length}</span>
+          </button>
+          <button 
+            className={`filter-btn featured-btn ${filter === 'featured' ? 'active' : ''}`}
+            onClick={() => setFilter('featured')}
+          >
+            ⭐ Featured Tech
+            <span className="filter-count">{timelineItems.filter(item => involvesPrimarySkills(item.technologies)).length}</span>
           </button>
         </div>
 
