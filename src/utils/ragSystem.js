@@ -251,17 +251,9 @@ function generateResponse(query, relevantChunks) {
 
   const lowerQuery = query.toLowerCase();
   
-  // Contact information
-  if (lowerQuery.includes('contact') || lowerQuery.includes('email') || lowerQuery.includes('reach') || lowerQuery.includes('phone')) {
-    return `### Contact Information\n\n📧 **Email:** ${portfolioData.personal.email}\n📱 **Phone:** ${portfolioData.personal.phone}\n📍 **Location:** ${portfolioData.personal.location} (${portfolioData.personal.timezone})\n\n**Interests:** ${portfolioData.personal.interests.slice(0, 3).join(', ')}`;
-  }
-
-  // Summary/About
-  if (lowerQuery.includes('summary') || lowerQuery.includes('about') || lowerQuery.includes('who is')) {
-    return `### About Bruce Blake\n\n${portfolioData.summary.brief}\n\n**What makes Bruce unique:**\n${portfolioData.summary.uniqueValue}`;
-  }
-
-  // Google experience
+  // Check for specific queries first before general ones
+  
+  // Google experience (check before general "about")
   if (lowerQuery.includes('google') || lowerQuery.includes('step intern')) {
     const googleExps = portfolioData.experience.filter(exp => exp.company === 'Google, Inc.');
     if (googleExps.length > 0) {
@@ -291,6 +283,11 @@ function generateResponse(query, relevantChunks) {
       });
       return response.trim();
     }
+  }
+
+  // Contact information
+  if (lowerQuery.includes('contact') || lowerQuery.includes('email') || lowerQuery.includes('reach') || lowerQuery.includes('phone')) {
+    return `### Contact Information\n\n📧 **Email:** ${portfolioData.personal.email}\n📱 **Phone:** ${portfolioData.personal.phone}\n📍 **Location:** ${portfolioData.personal.location} (${portfolioData.personal.timezone})\n\n**Interests:** ${portfolioData.personal.interests.slice(0, 3).join(', ')}`;
   }
 
   // Skills
@@ -393,6 +390,11 @@ function generateResponse(query, relevantChunks) {
     });
     
     return response.trim();
+  }
+
+  // Summary/About - check this last as it has generic keywords
+  if (lowerQuery.includes('summary') || lowerQuery.includes('about') || lowerQuery.includes('who is')) {
+    return `### About Bruce Blake\n\n${portfolioData.summary.brief}\n\n**What makes Bruce unique:**\n${portfolioData.summary.uniqueValue}`;
   }
 
   // Default: Return formatted version of most relevant chunk
