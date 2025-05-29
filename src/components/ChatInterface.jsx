@@ -4,36 +4,27 @@ import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
 import { Prism as SyntaxHighlighter } from 'react-syntax-highlighter';
 import { vscDarkPlus } from 'react-syntax-highlighter/dist/esm/styles/prism';
-import { getResponse, getTypingDelay } from '../utils/chatResponses';
+import { ragSystem } from '../utils/ragSystem';
 import './ChatInterface.css';
 
 const ChatInterface = () => {
-  // Dynamic greeting based on time
-  const getGreeting = () => {
-    const hour = new Date().getHours();
-    if (hour < 12) return "Good morning!";
-    if (hour < 18) return "Good afternoon!";
-    return "Good evening!";
-  };
-
   const [messages, setMessages] = useState([
     {
       role: 'assistant',
-      content: `${getGreeting()} I'm an AI assistant trained on Bruce Blake's professional background and accomplishments. 
-
-I can help you understand his experience at Google, his entrepreneurial ventures, technical skills, and academic achievements. What would you like to know about Bruce?`
+      content: `Hello! I'm an AI assistant with complete knowledge about Bruce Blake's professional background. I can answer questions about his experience at Google, freelance projects, technical skills, education, and accomplishments.\n\nWhat would you like to know?`
     }
   ]);
   const [input, setInput] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const messagesEndRef = useRef(null);
+  const textareaRef = useRef(null);
 
   const suggestedQuestions = [
-    "What was Bruce's experience like at Google?",
-    "Tell me about his entrepreneurial projects",
-    "What technical skills does Bruce have?",
-    "What makes Bruce stand out as a candidate?",
-    "Can you walk me through his most impactful projects?"
+    "Tell me about Bruce's experience at Google",
+    "What projects has Bruce built?",
+    "What are Bruce's technical skills?",
+    "How can I contact Bruce?",
+    "What makes Bruce unique as a candidate?"
   ];
 
   const scrollToBottom = () => {
@@ -44,6 +35,14 @@ I can help you understand his experience at Google, his entrepreneurial ventures
     scrollToBottom();
   }, [messages]);
 
+  // Auto-resize textarea
+  useEffect(() => {
+    if (textareaRef.current) {
+      textareaRef.current.style.height = 'auto';
+      textareaRef.current.style.height = textareaRef.current.scrollHeight + 'px';
+    }
+  }, [input]);
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (!input.trim() || isLoading) return;
@@ -53,136 +52,166 @@ I can help you understand his experience at Google, his entrepreneurial ventures
     setMessages(prev => [...prev, { role: 'user', content: userMessage }]);
     setIsLoading(true);
 
-    // Get static response based on keywords
-    const response = getResponse(userMessage);
-    const typingDelay = getTypingDelay(response);
+    // Get response from RAG system
+    const response = ragSystem.search(userMessage);
+    const typingDelay = ragSystem.getTypingDelay(response);
 
-    // Simulate typing delay for more realistic experience
+    // Simulate typing delay
     setTimeout(() => {
       setMessages(prev => [...prev, { role: 'assistant', content: response }]);
       setIsLoading(false);
-    }, Math.min(typingDelay, 2000)); // Cap at 2 seconds
+    }, typingDelay);
   };
 
   const handleSuggestedQuestion = (question) => {
     setInput(question);
-    handleSubmit({ preventDefault: () => {} });
+  };
+
+  const handleKeyDown = (e) => {
+    if (e.key === 'Enter' && !e.shiftKey) {
+      e.preventDefault();
+      handleSubmit(e);
+    }
   };
 
   return (
-    <div className="chat-container">
-      <div className="chat-header">
-        <h1>Chat with AI Assistant</h1>
-        <p>Ask me anything about Bruce Blake's experience and skills</p>
-      </div>
-      
-      <div className="chat-messages">
-        <AnimatePresence>
-          {messages.map((message, index) => (
+    <div className="chat-interface">
+      <div className="chat-main">
+        <div className="chat-messages-container">
+          <AnimatePresence>
+            {messages.map((message, index) => (
+              <motion.div
+                key={index}
+                className={`message-wrapper ${message.role}`}
+                initial={{ opacity: 0, y: 10 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.3 }}
+              >
+                <div className="message-content-wrapper">
+                  <div className="message-avatar">
+                    {message.role === 'user' ? (
+                      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                        <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" />
+                        <circle cx="12" cy="7" r="4" />
+                      </svg>
+                    ) : (
+                      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                        <rect x="3" y="11" width="18" height="10" rx="2" ry="2" />
+                        <path d="M7 11V7a5 5 0 0 1 10 0v4" />
+                      </svg>
+                    )}
+                  </div>
+                  <div className="message-text">
+                    {message.role === 'assistant' ? (
+                      <ReactMarkdown
+                        remarkPlugins={[remarkGfm]}
+                        components={{
+                          code({ inline, className, children, ...props }) {
+                            const match = /language-(\w+)/.exec(className || '');
+                            return !inline && match ? (
+                              <SyntaxHighlighter
+                                style={vscDarkPlus}
+                                language={match[1]}
+                                PreTag="div"
+                                {...props}
+                              >
+                                {String(children).replace(/\n$/, '')}
+                              </SyntaxHighlighter>
+                            ) : (
+                              <code className={className} {...props}>
+                                {children}
+                              </code>
+                            );
+                          }
+                        }}
+                      >
+                        {message.content}
+                      </ReactMarkdown>
+                    ) : (
+                      <p>{message.content}</p>
+                    )}
+                  </div>
+                </div>
+              </motion.div>
+            ))}
+          </AnimatePresence>
+          
+          {isLoading && (
             <motion.div
-              key={index}
-              className={`message ${message.role}`}
-              initial={{ opacity: 0, x: message.role === 'user' ? 20 : -20 }}
-              animate={{ opacity: 1, x: 0 }}
-              transition={{ duration: 0.3 }}
+              className="message-wrapper assistant"
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
             >
-              <div className="message-avatar">
-                {message.role === 'user' ? 'U' : 'AI'}
-              </div>
-              <div className="message-content">
-                {message.role === 'assistant' ? (
-                  <ReactMarkdown
-                    remarkPlugins={[remarkGfm]}
-                    components={{
-                      code({ inline, className, children, ...props }) {
-                        const match = /language-(\w+)/.exec(className || '');
-                        return !inline && match ? (
-                          <SyntaxHighlighter
-                            style={vscDarkPlus}
-                            language={match[1]}
-                            PreTag="div"
-                            {...props}
-                          >
-                            {String(children).replace(/\n$/, '')}
-                          </SyntaxHighlighter>
-                        ) : (
-                          <code className={className} {...props}>
-                            {children}
-                          </code>
-                        );
-                      },
-                      h1: ({ children }) => <h1 className="markdown-h1">{children}</h1>,
-                      h2: ({ children }) => <h2 className="markdown-h2">{children}</h2>,
-                      h3: ({ children }) => <h3 className="markdown-h3">{children}</h3>,
-                      ul: ({ children }) => <ul className="markdown-ul">{children}</ul>,
-                      ol: ({ children }) => <ol className="markdown-ol">{children}</ol>,
-                      li: ({ children }) => <li className="markdown-li">{children}</li>,
-                      blockquote: ({ children }) => <blockquote className="markdown-blockquote">{children}</blockquote>,
-                    }}
-                  >
-                    {message.content}
-                  </ReactMarkdown>
-                ) : (
-                  <p>{message.content}</p>
-                )}
+              <div className="message-content-wrapper">
+                <div className="message-avatar">
+                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                    <rect x="3" y="11" width="18" height="10" rx="2" ry="2" />
+                    <path d="M7 11V7a5 5 0 0 1 10 0v4" />
+                  </svg>
+                </div>
+                <div className="message-text">
+                  <div className="typing-indicator">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                  </div>
+                </div>
               </div>
             </motion.div>
-          ))}
-        </AnimatePresence>
-        
-        {isLoading && (
-          <motion.div
-            className="message assistant loading"
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-          >
-            <div className="typing-indicator">
-              <span></span>
-              <span></span>
-              <span></span>
-            </div>
-          </motion.div>
-        )}
-        
-        <div ref={messagesEndRef} />
-      </div>
-
-      <div className="suggested-questions">
-        <h3>Quick Questions for Recruiters:</h3>
-        <div className="questions-grid">
-          {suggestedQuestions.map((question, index) => (
-            <motion.button
-              key={index}
-              className="suggested-question"
-              initial={{ opacity: 0, y: 10 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: index * 0.1 }}
-              onClick={() => handleSuggestedQuestion(question)}
-            >
-              {question}
-            </motion.button>
-          ))}
+          )}
+          
+          <div ref={messagesEndRef} />
         </div>
+
+        {messages.length === 1 && (
+          <div className="suggested-questions-container">
+            <p className="suggested-questions-label">Suggested questions:</p>
+            <div className="suggested-questions">
+              {suggestedQuestions.map((question, index) => (
+                <motion.button
+                  key={index}
+                  className="suggested-question-btn"
+                  initial={{ opacity: 0, scale: 0.95 }}
+                  animate={{ opacity: 1, scale: 1 }}
+                  transition={{ delay: index * 0.05 }}
+                  onClick={() => handleSuggestedQuestion(question)}
+                >
+                  {question}
+                </motion.button>
+              ))}
+            </div>
+          </div>
+        )}
       </div>
 
-      <div className="chat-input-container">
-        <form onSubmit={handleSubmit} className="chat-input-wrapper">
-          <input
-            type="text"
-            value={input}
-            onChange={(e) => setInput(e.target.value)}
-            placeholder="Ask about Bruce's experience, skills, or projects..."
-            className="chat-input"
-            disabled={isLoading}
-          />
-          <button type="submit" className="send-button" disabled={isLoading || !input.trim()}>
-            Send
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-              <path d="M22 2L11 13" />
-              <path d="M22 2L15 22L11 13L2 9L22 2Z" />
-            </svg>
-          </button>
+      <div className="chat-input-area">
+        <form onSubmit={handleSubmit} className="chat-form">
+          <div className="chat-input-wrapper">
+            <textarea
+              ref={textareaRef}
+              value={input}
+              onChange={(e) => setInput(e.target.value)}
+              onKeyDown={handleKeyDown}
+              placeholder="Ask about Bruce's experience, projects, or skills..."
+              className="chat-textarea"
+              rows="1"
+              disabled={isLoading}
+            />
+            <button 
+              type="submit" 
+              className="send-button" 
+              disabled={isLoading || !input.trim()}
+            >
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                <line x1="22" y1="2" x2="11" y2="13" />
+                <polygon points="22 2 15 22 11 13 2 9 22 2" />
+              </svg>
+            </button>
+          </div>
         </form>
+        <p className="chat-footer-text">
+          This AI assistant has complete knowledge about Bruce Blake's portfolio
+        </p>
       </div>
     </div>
   );

@@ -4,9 +4,9 @@
     "title": "Software Engineer",
     "email": "bruceiiiblake@gmail.com",
     "phone": "571-393-5615",
-    "website": "Portfolio", // Assuming this is a placeholder for an actual URL like bruceblake.dev
-    "location": "USA", // General location, specific city can be inferred from education/work if needed
-    "timezone": "EST", // Assuming based on Virginia Tech
+    "website": "Portfolio",
+    "location": "USA",
+    "timezone": "EST",
     "languages": ["English (Native/Fluent)"],
     "interests": [
       "AI/ML Application Development",
@@ -20,9 +20,9 @@
     "currentFocus": "Developing impactful AI-driven solutions, contributing to large-scale software platforms, and deepening expertise in full-stack and systems engineering."
   },
   "links": {
-    "linkedin": "https://linkedin.com/in/yourprofile", // Placeholder
-    "github": "https://github.com/yourusername", // Placeholder
-    "portfolio": "https://yourportfolio.dev" // Placeholder, or same as personal.website
+    "linkedin": "https://linkedin.com/in/yourprofile",
+    "github": "https://github.com/yourusername",
+    "portfolio": "https://yourportfolio.dev"
   },
   "summary": {
     "brief": "Innovative Software Engineer and Computer Engineering student at Virginia Tech (In-Major GPA: 3.85) with a strong track record in developing full-stack AI solutions, contributing to Google's core internal systems, and excelling in competitive engineering challenges. Expertise spans Python, Java, C++, FastAPI, Angular, OpenAI APIs, and cloud technologies.",
@@ -160,7 +160,7 @@
     },
     {
       "title": "Co-founder / CTO",
-      "company": "Caught Up App Store Website", // Assuming this was the name of the product/company
+      "company": "Caught Up App Store Website",
       "location": "McLean, Virginia",
       "duration": {
         "start": "2023-11",
@@ -176,7 +176,7 @@
       "technologies": [
         "Flutter",
         "Dart",
-        "Firebase (for backend features like auth, database, messaging - implied)"
+        "Firebase"
       ]
     }
   ],
@@ -240,7 +240,7 @@
         "Docker (for build environment)"
       ],
       "links": {
-        "github": "https://github.com/yourusername/3d-physics-engine" // Placeholder
+        "github": "https://github.com/yourusername/3d-physics-engine"
       }
     },
     {
@@ -263,7 +263,7 @@
         "MVVM"
       ],
       "links": {
-        "github": "https://github.com/yourusername/ios-social-app-demo" // Placeholder
+        "github": "https://github.com/yourusername/ios-social-app-demo"
       }
     }
   ],

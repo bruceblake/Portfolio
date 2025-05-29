@@ -7,7 +7,7 @@ import './App.css';
 
 function App() {
   const [theme, setTheme] = useState('light');
-  const [mode, setMode] = useState(null);
+  const [mode, setMode] = useState('chat'); // Default to chat mode
 
   useEffect(() => {
     const savedTheme = localStorage.getItem('theme') || 'light';
@@ -34,9 +34,7 @@ function App() {
     setMode(mode === 'chat' ? 'timeline' : 'chat');
   };
 
-  if (!mode) {
-    return <LandingPage onSelectMode={handleSelectMode} />;
-  }
+  // Removed landing page check since we default to chat mode
 
   return (
     <div className="app">
