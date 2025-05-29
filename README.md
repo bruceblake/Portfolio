@@ -37,13 +37,18 @@ npm run build
 
 ```
 src/
-├── components/        # React components
-│   ├── LandingPage   # Initial selection screen
-│   ├── ChatInterface # AI chat component
-│   └── Timeline      # Visual timeline
-├── utils/            # Helper functions
-│   └── chatResponses # Static chat responses
-└── config/           # Configuration files
+├── components/          # React components
+│   ├── LandingPage      # Initial selection screen
+│   ├── ChatInterface    # AI chat component
+│   ├── Timeline         # Visual timeline
+│   ├── ProfessionalHeader # Navigation header
+│   └── QuickStats       # Stats display cards
+├── utils/               # Helper functions
+│   └── chatResponses    # Static chat responses
+├── App.jsx              # Main app component
+├── App.css              # App-level styles
+├── index.css            # Global styles
+└── main.jsx             # Entry point
 ```
 
 ## Deployment
