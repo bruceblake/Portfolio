@@ -5,12 +5,21 @@ import remarkGfm from 'remark-gfm';
 import { Prism as SyntaxHighlighter } from 'react-syntax-highlighter';
 import { vscDarkPlus } from 'react-syntax-highlighter/dist/esm/styles/prism';
 import { getResponse, getTypingDelay } from '../utils/chatResponses';
+import './ChatInterface.css';
 
 const ChatInterface = () => {
+  // Dynamic greeting based on time
+  const getGreeting = () => {
+    const hour = new Date().getHours();
+    if (hour < 12) return "Good morning!";
+    if (hour < 18) return "Good afternoon!";
+    return "Good evening!";
+  };
+
   const [messages, setMessages] = useState([
     {
       role: 'assistant',
-      content: `Welcome! I'm an AI assistant trained on Bruce Blake's professional background and accomplishments. 
+      content: `${getGreeting()} I'm an AI assistant trained on Bruce Blake's professional background and accomplishments. 
 
 I can help you understand his experience at Google, his entrepreneurial ventures, technical skills, and academic achievements. What would you like to know about Bruce?`
     }
