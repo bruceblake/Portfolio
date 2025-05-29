@@ -11,7 +11,7 @@ const ChatInterface = () => {
   const [messages, setMessages] = useState([
     {
       role: 'assistant',
-      content: `Hello! I'm an AI assistant with complete knowledge about Bruce Blake's professional background. I can answer questions about his experience at Google, freelance projects, technical skills, education, and accomplishments.\n\nWhat would you like to know?`
+      content: `Ask about Bruce's experience, projects, or skills.`
     }
   ]);
   const [input, setInput] = useState('');
@@ -20,11 +20,11 @@ const ChatInterface = () => {
   const textareaRef = useRef(null);
 
   const suggestedQuestions = [
-    "Tell me about Bruce's experience at Google",
-    "What projects has Bruce built?",
-    "What are Bruce's technical skills?",
-    "How can I contact Bruce?",
-    "What makes Bruce unique as a candidate?"
+    "Google experience",
+    "Projects built",
+    "Technical skills",
+    "Education",
+    "Contact info"
   ];
 
   const scrollToBottom = () => {

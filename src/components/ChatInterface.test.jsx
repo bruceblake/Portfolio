@@ -121,9 +121,12 @@ describe('ChatInterface Component', () => {
       await user.type(textarea, 'Test message')
       await user.keyboard('{Shift>}{Enter}{/Shift}')
       
-      // Message should not be sent
-      expect(screen.queryByText('Test message')).not.toBeInTheDocument()
-      expect(textarea.value).toContain('Test message')
+      // Message should still be in textarea, not sent as a message
+      expect(textarea.value).toBe('Test message\n')
+      // Check that no user message was added to the chat
+      const messages = screen.queryAllByText('Test message')
+      // Should only find it in the textarea, not as a message
+      expect(messages.length).toBe(0)
     })
 
     it('should handle suggested question clicks', async () => {
