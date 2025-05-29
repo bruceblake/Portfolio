@@ -35,13 +35,20 @@ const Timeline = () => {
       position: exp.title,
       icon: <Briefcase size={20} />
     })),
-    ...portfolioData.projects.map(proj => ({
+    ...portfolioData.technicalProjects.map(proj => ({
       ...proj,
       type: 'project',
-      date: proj.duration || 'Recent',
+      date: proj.status || 'Recent',
       displayDate: '2024',
       technologies: proj.technologies || [],
       icon: <Code size={20} />
+    })),
+    ...portfolioData.teamsAndAccomplishments.map(acc => ({
+      ...acc,
+      type: 'accomplishment',
+      date: acc.date || acc.duration || 'Recent',
+      displayDate: acc.date || '2024',
+      icon: <Award size={20} />
     }))
   ].sort((a, b) => {
     // Extract years for sorting
@@ -86,17 +93,21 @@ const Timeline = () => {
               transition={{ duration: 0.2 }}
             >
               <div className="timeline-header">
-                <h3>{item.type === 'experience' ? item.position : item.name}</h3>
+                <h3>{item.type === 'experience' ? item.position : item.type === 'project' ? item.name : item.title}</h3>
                 <span className="timeline-date">
                   <Calendar size={16} />
                   {item.date}
                 </span>
               </div>
 
-              <h4>{item.type === 'experience' ? item.company : `Technologies: ${item.technologies.join(', ')}`}</h4>
+              <h4>
+                {item.type === 'experience' ? item.company : 
+                 item.type === 'project' ? `${item.category}` : 
+                 item.event || ''}
+              </h4>
               
               <p className="timeline-description">
-                {item.type === 'experience' ? item.description : item.description}
+                {item.description || item.distinction || ''}
               </p>
 
               {item.type === 'experience' && item.achievements && (
@@ -135,13 +146,19 @@ const Timeline = () => {
                 </div>
               )}
 
-              {item.type === 'project' && item.features && (
+              {item.type === 'project' && item.technologies && (
                 <div className="project-highlights">
-                  {item.features.slice(0, 3).map((feature, i) => (
-                    <span key={i} className="highlight-tag">
-                      {feature}
-                    </span>
-                  ))}
+                  <strong>Tech:</strong> {item.technologies.slice(0, 5).join(', ')}
+                </div>
+              )}
+
+              {item.type === 'accomplishment' && item.keyContributions && (
+                <div className="timeline-achievements">
+                  <ul>
+                    {item.keyContributions.slice(0, 2).map((contribution, i) => (
+                      <li key={i}>{contribution}</li>
+                    ))}
+                  </ul>
                 </div>
               )}
             </motion.div>
@@ -157,10 +174,14 @@ const Timeline = () => {
       >
         <h3>Core Skills</h3>
         <div className="skills-cloud">
-          {[...portfolioData.skills.languages.expert, 
-            ...portfolioData.skills.languages.proficient,
-            ...portfolioData.skills.frameworks.frontend,
-            ...portfolioData.skills.frameworks.backend
+          {[
+            ...portfolioData.skills.programmingLanguages
+              .filter(lang => lang.proficiency === 'Expert' || lang.proficiency === 'Proficient')
+              .map(lang => lang.language),
+            ...portfolioData.skills.frameworksAndLibraries
+              .filter(fw => fw.expertise === 'Advanced' || fw.expertise === 'Proficient')
+              .map(fw => fw.name)
+              .slice(0, 10)
           ].map((skill, index) => (
             <motion.span
               key={skill}
