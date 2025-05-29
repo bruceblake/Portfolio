@@ -3,10 +3,10 @@ import { motion } from 'framer-motion';
 
 const QuickStats = () => {
   const stats = [
-    { label: 'Users Impacted', value: '2.5M+', detail: 'Through Google internships' },
-    { label: 'Revenue Generated', value: '$15K+', detail: 'From entrepreneurial ventures' },
-    { label: 'GPA', value: '3.85', detail: 'Virginia Tech Computer Science' },
-    { label: 'Experience', value: '4+ Years', detail: 'Full-stack development' }
+    { label: 'GitHub Repos', value: '50+', detail: 'Active open source projects' },
+    { label: 'Companies', value: '3', detail: 'Google (2x) + Freelance' },
+    { label: 'Projects Built', value: '7+', detail: 'From game engines to AI' },
+    { label: 'Tech Skills', value: '25+', detail: 'Languages & frameworks' }
   ];
 
   return (

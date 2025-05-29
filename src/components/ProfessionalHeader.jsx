@@ -4,7 +4,13 @@ import './ProfessionalHeader.css';
 
 const ProfessionalHeader = ({ theme, toggleTheme, onBackToLanding, onSwitchMode, currentMode }) => {
   const handleDownload = () => {
-    window.print();
+    // Create a link to download the resume
+    const link = document.createElement('a');
+    link.href = `${import.meta.env.BASE_URL}resume.pdf`;
+    link.download = 'Bruce_Blake_Resume.pdf';
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
   };
 
   return (
