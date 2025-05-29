@@ -6,7 +6,7 @@ const ProfessionalHeader = ({ theme, toggleTheme, onBackToLanding, onSwitchMode,
   const handleDownload = () => {
     // Create a link to download the resume
     const link = document.createElement('a');
-    link.href = `${import.meta.env.BASE_URL}resume.pdf`;
+    link.href = `${import.meta.env.BASE_URL}BRUCE_BLAKE_RESUME.pdf`;
     link.download = 'Bruce_Blake_Resume.pdf';
     document.body.appendChild(link);
     link.click();
