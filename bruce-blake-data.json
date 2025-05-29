@@ -1,0 +1,359 @@
+{
+  "personal": {
+    "name": "Bruce Blake",
+    "title": "Software Engineer",
+    "email": "bruceblake@vt.edu",
+    "location": "USA",
+    "timezone": "EST",
+    "languages": ["English"],
+    "interests": ["AI/ML", "Full-Stack Development", "Game Development", "Cloud Architecture"],
+    "currentFocus": "Building scalable AI systems and exploring the intersection of low-level programming and high-level cloud services"
+  },
+  
+  "summary": {
+    "brief": "Full-stack engineer comfortable from low-level C++ game engines to cloud-native AI services. Currently pursuing B.S. in Computer Engineering at Virginia Tech with a 3.85 GPA.",
+    "detailed": "I'm a software engineer who thrives at the intersection of systems programming and modern web development. My journey spans from building custom 3D physics engines in C++ to creating AI-powered solutions that generate real revenue. I believe in understanding technology from the ground up - whether that's implementing collision detection algorithms or designing distributed systems at Google scale.",
+    "uniqueValue": "I bring a rare combination of low-level systems understanding and high-level product thinking. While others use frameworks, I build engines. While others make demos, I create revenue-generating systems. This full-stack mastery from bare metal to cloud enables me to architect solutions that are both technically sound and business-impactful."
+  },
+  
+  "experience": [
+    {
+      "title": "STEP Intern",
+      "company": "Google",
+      "team": "Platforms & Devices",
+      "location": "Mountain View, CA",
+      "duration": {
+        "start": "2025-05",
+        "end": "2025-08"
+      },
+      "current": false,
+      "upcoming": true,
+      "description": "Incoming STEP intern on the Platforms & Devices team, working on core platform technologies",
+      "responsibilities": [
+        "Will work with Java, Angular, TypeScript, and Protocol Buffers",
+        "Contributing to platform-level solutions used across Google products",
+        "Participating in design reviews and technical discussions"
+      ],
+      "technologies": ["Java", "Angular", "TypeScript", "Protocol Buffers"],
+      "impact": "Joining the team that builds foundational platforms powering Google's ecosystem"
+    },
+    {
+      "title": "Freelance Software Engineer",
+      "company": "Red Bar Sushi",
+      "location": "Remote",
+      "duration": {
+        "start": "2024-09",
+        "end": "2025-02"
+      },
+      "current": false,
+      "description": "Built an AI-powered inbound phone ordering system from scratch",
+      "responsibilities": [
+        "Architected and implemented complete phone ordering solution using AI",
+        "Designed MySQL + JSON menu management system for dynamic updates",
+        "Implemented Celery workers for asynchronous SMS order confirmations",
+        "Containerized micro-services with Docker following DevSecOps practices",
+        "Integrated payment processing and order management workflows"
+      ],
+      "technologies": ["Python", "MySQL", "Docker", "Celery", "Twilio", "OpenAI API", "Redis"],
+      "impact": {
+        "revenue": "$15,000+",
+        "customers": "600+",
+        "efficiency": "Reduced order processing time by 70%",
+        "availability": "24/7 automated ordering system"
+      },
+      "achievements": [
+        "Generated $15k+ in revenue within first 3 months",
+        "Served 600+ customers with 98% order accuracy",
+        "Reduced restaurant's phone order handling time by 70%",
+        "Built system that scales to handle concurrent calls"
+      ]
+    },
+    {
+      "title": "STEP Intern",
+      "company": "Google",
+      "team": "Geo Data Quality",
+      "location": "Sunnyvale, CA",
+      "duration": {
+        "start": "2024-05",
+        "end": "2024-08"
+      },
+      "current": false,
+      "description": "Created an internal issue-similarity recommender using machine learning",
+      "responsibilities": [
+        "Built ML-powered tool to identify similar data quality issues",
+        "Implemented OpenAI embeddings for semantic similarity matching",
+        "Authored comprehensive design documentation",
+        "Led technical reviews with senior engineers",
+        "Launched feature end-to-end within 12-week internship"
+      ],
+      "technologies": ["Java", "TypeScript", "Angular", "OpenAI Embeddings", "Apps Framework", "SQL"],
+      "impact": {
+        "users": "2.5M+ monthly active users",
+        "efficiency": "Reduced manual triage time by 40%",
+        "adoption": "Integrated into core data quality workflows"
+      },
+      "achievements": [
+        "Tool adopted by 2.5M+ users per month",
+        "Reduced issue triage time significantly",
+        "Received excellent performance review",
+        "Invited back for second internship"
+      ]
+    }
+  ],
+  
+  "projects": [
+    {
+      "name": "3D Physics Engine & Multiplayer FPS Game",
+      "category": "Game Development",
+      "status": "Completed",
+      "duration": "6 months",
+      "description": "Custom 3D game engine built from scratch in C++ with physics simulation and multiplayer support",
+      "motivation": "Wanted to understand game engines at a fundamental level rather than just using Unity/Unreal",
+      "technicalDetails": {
+        "physics": "Implemented collision detection using SAT (Separating Axis Theorem) and GJK algorithms",
+        "rendering": "Custom OpenGL rendering pipeline with shader management",
+        "networking": "Low-latency multiplayer using ENet with client-side prediction",
+        "architecture": "Entity-Component-System (ECS) design pattern"
+      },
+      "features": [
+        "Custom physics engine with realistic collision detection and response",
+        "OpenGL-based rendering pipeline with dynamic lighting and shadows",
+        "Particle system for visual effects",
+        "Low-latency multiplayer using ENet protocol",
+        "Client-side prediction and lag compensation",
+        "Level editor using Dear ImGui",
+        "Cross-platform support (Windows, Linux, macOS)"
+      ],
+      "technologies": ["C++", "OpenGL", "SDL2", "Dear ImGui", "ENet", "GLM", "Docker"],
+      "challenges": [
+        "Debugging complex physics interactions and edge cases",
+        "Implementing smooth multiplayer with client prediction",
+        "Optimizing render pipeline for 60+ FPS",
+        "Managing memory efficiently in C++"
+      ],
+      "outcomes": [
+        "Fully functional FPS game with custom engine",
+        "Deep understanding of game engine architecture",
+        "Experience with low-level systems programming",
+        "Portfolio piece that demonstrates technical depth"
+      ],
+      "links": {
+        "github": "https://github.com/bruceblake/3d-physics-engine",
+        "demo": "Available on request"
+      }
+    },
+    {
+      "name": "BetterRepo2File",
+      "category": "Developer Tools",
+      "status": "Active Development",
+      "description": "Intelligent tool that extracts and formats repository context for AI coding assistants",
+      "motivation": "AI coding assistants often lack proper context - this tool solves that by intelligently extracting relevant code",
+      "technicalDetails": {
+        "parsing": "AST-based code analysis for intelligent extraction",
+        "testing": "End-to-end tests with Playwright streaming results",
+        "deployment": "Containerized with Docker for reproducible environments",
+        "ci_cd": "GitHub Actions with automated badge generation"
+      },
+      "features": [
+        "Intelligent code extraction based on dependencies",
+        "Support for multiple languages and frameworks",
+        "Configurable extraction rules",
+        "GitHub Actions integration",
+        "Real-time test status badges",
+        "Docker containerization"
+      ],
+      "technologies": ["Python", "Docker", "Playwright", "GitHub Actions", "AST Parsing"],
+      "impact": "Used by developers to improve AI assistant code generation quality",
+      "links": {
+        "github": "https://github.com/bruceblake/BetterRepo2File"
+      }
+    },
+    {
+      "name": "iOS Social Media Demo App",
+      "category": "Mobile Development",
+      "status": "Completed",
+      "scale": "20,000+ lines of code",
+      "description": "Comprehensive iOS application demonstrating modern SwiftUI and MVVM architecture",
+      "features": [
+        "User authentication with secure token management",
+        "Real-time messaging using Firebase",
+        "Group creation and management",
+        "Event planning with location services",
+        "Photo gallery with cloud storage",
+        "Push notifications",
+        "Offline support with CoreData"
+      ],
+      "architecture": {
+        "pattern": "MVVM (Model-View-ViewModel)",
+        "stateManagement": "Combine framework",
+        "persistence": "CoreData + Firebase",
+        "networking": "URLSession with async/await"
+      },
+      "technologies": ["Swift", "SwiftUI", "Firebase", "CoreData", "Combine", "MapKit"],
+      "codeQuality": "Clean architecture with 20k+ lines of maintainable code",
+      "links": {
+        "github": "https://github.com/bruceblake/ios-social-app"
+      }
+    },
+    {
+      "name": "DreamCanvas",
+      "category": "AI/ML Application",
+      "status": "Completed",
+      "description": "AI-powered image generation playground with real-time editing capabilities",
+      "technicalDetails": {
+        "frontend": "React with TypeScript for type safety",
+        "aiIntegration": "Stable Diffusion API with custom parameters",
+        "realtime": "WebSocket implementation for progress streaming",
+        "stateManagement": "Zustand for efficient state updates"
+      },
+      "features": [
+        "Real-time image generation with progress updates",
+        "Mask-based inpainting for precise edits",
+        "Prompt engineering interface",
+        "Dark/light theme with system preference detection",
+        "Mobile-responsive design",
+        "Image history and gallery"
+      ],
+      "technologies": ["TypeScript", "React", "Stable Diffusion", "Tailwind CSS", "WebSockets", "Zustand"],
+      "links": {
+        "github": "https://github.com/bruceblake/DreamCanvas"
+      }
+    },
+    {
+      "name": "SudokuSolver",
+      "category": "Algorithms & Web",
+      "status": "Completed",
+      "description": "Interactive web app that solves and explains Sudoku puzzles step-by-step",
+      "technicalDetails": {
+        "algorithm": "Backtracking with optimization heuristics",
+        "visualization": "Step-by-step solving animation",
+        "deployment": "Vercel with automated Lighthouse checks"
+      },
+      "features": [
+        "Visual solving process with animations",
+        "Multiple difficulty levels",
+        "Puzzle generation",
+        "Hint system",
+        "Performance metrics",
+        "Mobile-friendly interface"
+      ],
+      "technologies": ["TypeScript", "React", "Vite", "Vercel", "Firebase"],
+      "links": {
+        "github": "https://github.com/bruceblake/SudokuSolver",
+        "live": "https://sudokusolver.vercel.app"
+      }
+    }
+  ],
+  
+  "education": {
+    "degree": "Bachelor of Science in Computer Engineering",
+    "minor": "Computer Science",
+    "institution": "Virginia Tech",
+    "location": "Blacksburg, VA",
+    "graduationDate": "May 2026",
+    "gpa": {
+      "current": 3.85,
+      "scale": 4.0
+    },
+    "relevantCoursework": [
+      "Data Structures & Algorithms",
+      "Computer Architecture",
+      "Operating Systems",
+      "Machine Learning",
+      "Software Engineering",
+      "Computer Networks",
+      "Database Systems",
+      "Embedded Systems"
+    ],
+    "achievements": [
+      "Dean's List (Multiple Semesters)",
+      "VTHacks 12 Winner - Built 'Memegen' in 36 hours",
+      "Member of Diggeridoos Tunnel Robotics Team"
+    ],
+    "activities": [
+      {
+        "name": "Diggeridoos Tunnel Robotics Team",
+        "role": "Software Team Member",
+        "description": "One of 12 teams worldwide invited to Elon Musk's Not-A-Boring competition",
+        "contributions": "Developing autonomous navigation systems for tunnel-boring robot"
+      }
+    ]
+  },
+  
+  "skills": {
+    "languages": {
+      "expert": ["Java", "Python", "TypeScript", "JavaScript"],
+      "proficient": ["C++", "Swift", "C#"],
+      "familiar": ["Dart", "SQL", "HTML/CSS"]
+    },
+    "frameworks": {
+      "frontend": ["React", "Angular", "SwiftUI", "Flutter"],
+      "backend": ["FastAPI", "Flask", "Spring Boot"],
+      "mobile": ["SwiftUI", "UIKit", "Flutter"]
+    },
+    "databases": ["PostgreSQL", "MySQL", "Firebase", "Redis", "MongoDB"],
+    "tools": {
+      "development": ["Git", "Docker", "VS Code", "IntelliJ IDEA", "Xcode"],
+      "deployment": ["AWS", "Google Cloud", "Vercel", "GitHub Actions"],
+      "other": ["Linux", "Arduino", "Figma"]
+    },
+    "concepts": [
+      "Full-Stack Development",
+      "System Design",
+      "Machine Learning",
+      "Cloud Architecture",
+      "DevOps/CI-CD",
+      "Microservices",
+      "RESTful APIs",
+      "Agile/Scrum"
+    ]
+  },
+  
+  "achievements": [
+    {
+      "title": "VTHacks 12 Winner",
+      "date": "2024",
+      "description": "Won hackathon by building 'Memegen' - an AI-powered meme generator in 36 hours",
+      "skills": ["Rapid Prototyping", "Team Leadership", "AI Integration"]
+    },
+    {
+      "title": "Google STEP Intern (2x)",
+      "date": "2024, 2025",
+      "description": "Selected for highly competitive Google STEP internship program twice",
+      "impact": "Less than 3% acceptance rate"
+    },
+    {
+      "title": "$15k Revenue Generated",
+      "date": "2024",
+      "description": "Built AI system that generated $15k+ revenue for client in 3 months",
+      "skills": ["Business Impact", "Product Development", "AI Implementation"]
+    }
+  ],
+  
+  "philosophy": {
+    "approach": "I believe in understanding technology from first principles. Whether building a physics engine or a distributed system, I start with the fundamentals and build up.",
+    "values": [
+      "Deep technical understanding over surface-level knowledge",
+      "Building for real impact, not just demos",
+      "Clean, maintainable code over quick hacks",
+      "Continuous learning and growth"
+    ],
+    "goals": {
+      "shortTerm": "Excel in upcoming Google internship and graduate with honors",
+      "mediumTerm": "Join a company where I can work on challenging technical problems at scale",
+      "longTerm": "Build products that positively impact millions of users"
+    }
+  },
+  
+  "contact": {
+    "email": "bruceblake@vt.edu",
+    "linkedin": "https://linkedin.com/in/bruceblake",
+    "github": "https://github.com/bruceblake",
+    "availability": "Open to internships and full-time opportunities",
+    "preferences": {
+      "workType": ["Full-time", "Internship"],
+      "locations": ["San Francisco", "New York", "Seattle", "Remote"],
+      "interests": ["AI/ML", "Distributed Systems", "Full-Stack", "Game Engines"]
+    }
+  }
+}
