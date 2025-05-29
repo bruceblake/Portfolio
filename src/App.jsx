@@ -5,6 +5,8 @@ import Timeline from './components/Timeline';
 import About from './components/About';
 import Skills from './components/Skills';
 import Contact from './components/Contact';
+import LoadingScreen from './components/LoadingScreen';
+import ScrollProgress from './components/ScrollProgress';
 import './App.css';
 
 function App() {
@@ -49,7 +51,7 @@ function App() {
   }, []);
 
   if (isLoading) {
-    return <div className="loading">Loading portfolio data...</div>;
+    return <LoadingScreen />;
   }
 
   if (error) {
@@ -62,6 +64,7 @@ function App() {
 
   return (
     <div className="App">
+      <ScrollProgress />
       <ProfessionalHeader portfolioData={portfolioData} />
       <main className="main-content">
         <Hero portfolioData={portfolioData} />

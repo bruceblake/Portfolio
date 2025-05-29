@@ -149,27 +149,6 @@
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
 }
 
-/* Featured button special styling */
-.filter-btn.featured-btn {
-  background: linear-gradient(135deg, rgba(102, 126, 234, 0.1), rgba(118, 75, 162, 0.1));
-  border-color: rgba(102, 126, 234, 0.3);
-}
-
-.filter-btn.featured-btn:hover {
-  background: linear-gradient(135deg, rgba(102, 126, 234, 0.2), rgba(118, 75, 162, 0.2));
-  border-color: rgba(102, 126, 234, 0.5);
-}
-
-.filter-btn.featured-btn.active {
-  background: linear-gradient(135deg, #667eea, #764ba2);
-  border-color: transparent;
-  animation: gradientShift 3s ease infinite;
-}
-
-@keyframes gradientShift {
-  0%, 100% { background-position: 0% 50%; }
-  50% { background-position: 100% 50%; }
-}
 
 /* Timeline Container */
 .timeline {
@@ -274,7 +253,7 @@
   background: rgba(255, 255, 255, 0.05);
   backdrop-filter: blur(10px);
   border: 1px solid rgba(255, 255, 255, 0.2);
-  padding: 2rem;
+  padding: 1.5rem;
   border-radius: 20px;
   box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
   transition: all 0.4s cubic-bezier(0.23, 1, 0.32, 1);
@@ -303,52 +282,19 @@
   border-color: rgba(255, 255, 255, 0.3);
 }
 
-/* Highlight items with primary technologies */
-.timeline-item.primary-tech .timeline-card {
-  border: 2px solid #667eea;
-  position: relative;
-  box-shadow: 0 0 30px rgba(102, 126, 234, 0.4);
-  background: rgba(102, 126, 234, 0.05);
-}
-
-.timeline-item.primary-tech .timeline-marker {
-  background: linear-gradient(135deg, #667eea, #764ba2);
-  animation: pulse 2s ease-in-out infinite;
-}
-
-@keyframes pulse {
-  0%, 100% { transform: translateX(-50%) scale(1); box-shadow: 0 0 0 0 rgba(102, 126, 234, 0.4); }
-  50% { transform: translateX(-50%) scale(1.05); box-shadow: 0 0 0 10px rgba(102, 126, 234, 0); }
-}
-
-.timeline-item.primary-tech .timeline-card::after {
-  content: '⭐ Featured Tech';
-  position: absolute;
-  top: -14px;
-  right: 20px;
-  background: linear-gradient(135deg, #667eea, #764ba2);
-  color: white;
-  padding: 0.4rem 1rem;
-  border-radius: 20px;
-  font-size: 0.8rem;
-  font-weight: 600;
-  box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4);
-  border: 1px solid rgba(255, 255, 255, 0.2);
-  z-index: 2;
-}
 
 .timeline-title {
-  font-size: 1.5rem;
+  font-size: 1.25rem;
   font-weight: 700;
   color: white;
-  margin-bottom: 0.5rem;
+  margin-bottom: 0.4rem;
 }
 
 .timeline-subtitle {
-  font-size: 1.1rem;
+  font-size: 1rem;
   color: rgba(255, 255, 255, 0.8);
   font-weight: 600;
-  margin-bottom: 0.5rem;
+  margin-bottom: 0.4rem;
 }
 
 .timeline-location {
@@ -359,16 +305,17 @@
 
 .timeline-description {
   color: rgba(255, 255, 255, 0.7);
-  line-height: 1.6;
-  margin-bottom: 1rem;
+  line-height: 1.5;
+  margin-bottom: 0.75rem;
+  font-size: 0.9rem;
 }
 
 /* Technologies */
 .timeline-technologies {
   display: flex;
   flex-wrap: wrap;
-  gap: 0.5rem;
-  margin-bottom: 1rem;
+  gap: 0.4rem;
+  margin-bottom: 0.75rem;
 }
 
 .tech-tag {
@@ -388,19 +335,49 @@
   box-shadow: 0 4px 12px rgba(255, 255, 255, 0.1);
 }
 
+.tech-tag.key-tech {
+  background: rgba(59, 130, 246, 0.2);
+  border-color: rgba(59, 130, 246, 0.5);
+  color: #60a5fa;
+  font-weight: 700;
+  animation: subtle-glow 2s ease-in-out infinite;
+}
+
+@keyframes subtle-glow {
+  0%, 100% {
+    box-shadow: 0 0 8px rgba(59, 130, 246, 0.3);
+  }
+  50% {
+    box-shadow: 0 0 16px rgba(59, 130, 246, 0.5);
+  }
+}
+
+.tech-tag.more-skills {
+  background: rgba(100, 116, 139, 0.1);
+  color: #64748b;
+  font-style: italic;
+}
+
 /* Details */
 .timeline-details {
   list-style: none;
   padding: 0;
-  margin: 1rem 0;
+  margin: 0.75rem 0;
 }
 
 .timeline-details li {
   position: relative;
   padding-left: 1.5rem;
-  margin-bottom: 0.5rem;
+  margin-bottom: 0.4rem;
   color: rgba(255, 255, 255, 0.7);
-  line-height: 1.5;
+  line-height: 1.4;
+  font-size: 0.9rem;
+}
+
+.timeline-details li.more-details {
+  color: #64748b;
+  font-style: italic;
+  font-size: 0.85rem;
 }
 
 .timeline-details li::before {
@@ -491,8 +468,38 @@
   }
 }
 
+@keyframes slideInLeft {
+  from {
+    opacity: 0;
+    transform: translateX(-50px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes slideInRight {
+  from {
+    opacity: 0;
+    transform: translateX(50px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
 .timeline-item.visible {
   animation: fadeInUp 0.6s ease-out forwards;
+}
+
+.timeline-item.left.visible .timeline-content {
+  animation: slideInLeft 0.8s ease-out 0.3s both;
+}
+
+.timeline-item.right.visible .timeline-content {
+  animation: slideInRight 0.8s ease-out 0.3s both;
 }
 
 .timeline-item:nth-child(1) { animation-delay: 0.1s; }

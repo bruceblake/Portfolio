@@ -7,22 +7,11 @@ const Timeline = ({ portfolioData }) => {
   const timelineRef = useRef(null);
   const itemRefs = useRef([]);
   
-  const primarySkills = ['TypeScript', 'React', 'Angular', 'Java', 'Python'];
+  // Key technologies to highlight
+  const keyTechnologies = ['TypeScript', 'React', 'Angular', 'Java', 'Python', 'FastAPI', 'Docker', 'PostgreSQL', 'Redis', 'OpenAI', 'Google', 'AWS', 'Node.js', 'C++'];
   
-  // Helper function to check if item involves primary skills
-  const involvesPrimarySkills = (technologies) => {
-    if (!technologies || !Array.isArray(technologies)) return false;
-    const techLower = technologies.map(t => t.toString().toLowerCase());
-    return primarySkills.some(skill => 
-      techLower.some(tech => 
-        tech.includes(skill.toLowerCase()) || 
-        (skill === 'TypeScript' && tech.includes('typescript')) ||
-        (skill === 'React' && (tech.includes('react') || tech.includes('next'))) ||
-        (skill === 'Angular' && tech.includes('angular')) ||
-        (skill === 'Java' && tech.includes('java')) ||
-        (skill === 'Python' && tech.includes('python'))
-      )
-    );
+  const isKeyTechnology = (tech) => {
+    return keyTechnologies.some(key => tech.toLowerCase().includes(key.toLowerCase()));
   };
 
   // Combine all timeline items from different sources
@@ -109,8 +98,6 @@ const Timeline = ({ portfolioData }) => {
   // Filter items based on selected category
   const filteredItems = filter === 'all' 
     ? timelineItems 
-    : filter === 'featured'
-    ? timelineItems.filter(item => involvesPrimarySkills(item.technologies))
     : timelineItems.filter(item => item.type === filter);
 
   // Intersection Observer for animations
@@ -181,13 +168,6 @@ const Timeline = ({ portfolioData }) => {
             🚀 Projects
             <span className="filter-count">{timelineItems.filter(item => item.type === 'project').length}</span>
           </button>
-          <button 
-            className={`filter-btn featured-btn ${filter === 'featured' ? 'active' : ''}`}
-            onClick={() => setFilter('featured')}
-          >
-            ⭐ Featured Tech
-            <span className="filter-count">{timelineItems.filter(item => involvesPrimarySkills(item.technologies)).length}</span>
-          </button>
         </div>
 
         {/* Timeline */}
@@ -201,7 +181,7 @@ const Timeline = ({ portfolioData }) => {
               data-item-id={item.id}
               className={`timeline-item ${item.type} ${index % 2 === 0 ? 'left' : 'right'} ${
                 visibleItems.has(item.id) ? 'visible' : ''
-              } ${involvesPrimarySkills(item.technologies) ? 'primary-tech' : ''}`}
+              }`}
             >
               <div className="timeline-marker" style={{ backgroundColor: getTypeColor(item.type) }}>
                 <span className="timeline-icon">{item.icon}</span>
@@ -220,21 +200,41 @@ const Timeline = ({ portfolioData }) => {
                   <h4 className="timeline-subtitle">{item.subtitle}</h4>
                   {item.location && <p className="timeline-location">📍 {item.location}</p>}
                   
-                  <p className="timeline-description">{item.description}</p>
+                  {item.description && (
+                    <p className="timeline-description">
+                      {item.description.length > 150 ? 
+                        item.description.substring(0, 150) + '...' : 
+                        item.description
+                      }
+                    </p>
+                  )}
                   
                   {item.technologies && item.technologies.length > 0 && (
                     <div className="timeline-technologies">
-                      {item.technologies.map((tech, idx) => (
-                        <span key={idx} className="tech-tag">{tech}</span>
+                      {item.technologies.slice(0, 8).map((tech, idx) => (
+                        <span 
+                          key={idx} 
+                          className={`tech-tag ${isKeyTechnology(tech) ? 'key-tech' : ''}`}
+                        >
+                          {tech}
+                        </span>
                       ))}
+                      {item.technologies.length > 8 && (
+                        <span className="tech-tag more-skills">+{item.technologies.length - 8} more</span>
+                      )}
                     </div>
                   )}
                   
                   {item.details && item.details.length > 0 && (
                     <ul className="timeline-details">
-                      {item.details.slice(0, 3).map((detail, idx) => (
-                        <li key={idx}>{detail}</li>
+                      {item.details.slice(0, 2).map((detail, idx) => (
+                        <li key={idx}>
+                          {detail.length > 100 ? detail.substring(0, 100) + '...' : detail}
+                        </li>
                       ))}
+                      {item.details.length > 2 && (
+                        <li className="more-details">...and {item.details.length - 2} more</li>
+                      )}
                     </ul>
                   )}
                   

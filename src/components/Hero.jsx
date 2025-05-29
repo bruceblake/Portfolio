@@ -8,7 +8,7 @@ const Hero = ({ portfolioData }) => {
     document.getElementById('timeline')?.scrollIntoView({ behavior: 'smooth' });
   };
 
-  const primarySkills = ['TypeScript', 'React', 'Angular', 'Java', 'Python'];
+  const primarySkills = ['TypeScript', 'React', 'Angular', 'Java', 'Python', 'Docker', 'AWS'];
 
   return (
     <section id="hero" className="hero">
@@ -29,7 +29,7 @@ const Hero = ({ portfolioData }) => {
           </div>
           
           <p className="hero-description">
-            {portfolioData?.summary?.brief?.split('.')[0] || 'Passionate about building innovative solutions'}
+            Full-stack engineer specializing in scalable web applications and AI integration
           </p>
           
           <div className="hero-cta">

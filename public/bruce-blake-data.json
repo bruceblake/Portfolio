@@ -25,7 +25,7 @@
     "portfolio": "https://yourportfolio.dev"
   },
   "summary": {
-    "brief": "Innovative Software Engineer and Computer Engineering student at Virginia Tech (In-Major GPA: 3.85) with a strong track record in developing full-stack AI solutions, contributing to Google's core internal systems, and excelling in competitive engineering challenges. Expertise spans Python, Java, C++, FastAPI, Angular, OpenAI APIs, and cloud technologies.",
+    "brief": "Innovative Software Engineer and Computer Engineering student at Virginia Tech with a strong track record in developing full-stack AI solutions, contributing to Google's core internal systems, and excelling in competitive engineering challenges. Expertise spans Python, Java, C++, FastAPI, Angular, OpenAI APIs, and cloud technologies.",
     "detailed": "I am a results-oriented Software Engineer deeply passionate about the entire spectrum of software creation, from low-level C++ game engine development to architecting and deploying sophisticated, AI-powered cloud services. My experience includes two internships at Google, where I developed impactful features for company-wide systems like Buganizer, and freelance work where I built a revenue-generating AI voice ordering system from scratch. I possess a strong foundation in computer engineering principles, coupled with hands-on experience in modern software development practices, including agile methodologies, CI/CD, and robust testing. I thrive in collaborative environments and am driven to solve complex problems with elegant and efficient technical solutions.",
     "uniqueValue": "My unique value proposition lies in the combination of deep technical curiosity, a practical full-stack skillset, and a proven ability to deliver tangible results. I have demonstrated proficiency in building complex systems (e.g., AI multi-agent orchestration, 3D physics engines) and navigating the engineering challenges of large-scale platforms (Google). This allows me to not only understand theoretical concepts but also to effectively implement and launch impactful software solutions, as evidenced by my contributions to systems used by millions and freelance projects generating significant revenue."
   },
@@ -173,11 +173,7 @@
         "Key features developed include a shared interactive calendar, intuitive event creation and joining flows, and real-time in-app messaging functionalities.",
         "Contributed to UI/UX design, backend architecture planning (likely Firebase or similar BaaS), and overall product roadmap."
       ],
-      "technologies": [
-        "Flutter",
-        "Dart",
-        "Firebase"
-      ]
+      "technologies": ["Flutter", "Dart", "Firebase"]
     }
   ],
   "teamsAndAccomplishments": [

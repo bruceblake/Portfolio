@@ -59,6 +59,8 @@
   opacity: 0;
   transform: translateY(30px) scale(0.95);
   transition: all 0.6s cubic-bezier(0.23, 1, 0.32, 1);
+  transform-style: preserve-3d;
+  perspective: 1000px;
 }
 
 .skill-category.animate-in {
@@ -169,6 +171,20 @@
   box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
 }
 
+.skill-tag.key-skill {
+  background: rgba(59, 130, 246, 0.2);
+  border-color: rgba(59, 130, 246, 0.5);
+  color: #60a5fa;
+  font-weight: 700;
+  animation: subtle-glow 2s ease-in-out infinite;
+}
+
+.skill-tag.more-skills {
+  background: rgba(100, 116, 139, 0.1);
+  color: #64748b;
+  font-style: italic;
+}
+
 /* Background shapes */
 .skills-bg-shapes {
   position: absolute;
@@ -268,22 +284,3 @@
   }
 }
 
-/* Mouse tracking effect */
-@media (hover: hover) {
-  .skills {
-    cursor: none;
-  }
-  
-  .skills::after {
-    content: '';
-    position: fixed;
-    width: 20px;
-    height: 20px;
-    border-radius: 50%;
-    background: radial-gradient(circle, rgba(255, 255, 255, 0.8), transparent);
-    pointer-events: none;
-    transform: translate(-50%, -50%);
-    transition: transform 0.1s ease;
-    z-index: 9999;
-  }
-}

@@ -6,6 +6,12 @@ const Skills = ({ portfolioData }) => {
   const skillsRef = useRef(null);
   const skills = portfolioData?.skills || {};
   
+  const keyTechnologies = ['TypeScript', 'React', 'Angular', 'Java', 'Python', 'FastAPI', 'Docker', 'PostgreSQL', 'Redis', 'OpenAI', 'Google', 'AWS', 'Node.js', 'C++'];
+  
+  const isKeyTechnology = (tech) => {
+    return keyTechnologies.some(key => tech.toLowerCase().includes(key.toLowerCase()));
+  };
+  
   useEffect(() => {
     const observer = new IntersectionObserver(
       (entries) => {
@@ -99,15 +105,18 @@ const Skills = ({ portfolioData }) => {
               </div>
               
               <div className="skill-tags">
-                {category.items.map((skill, idx) => (
+                {category.items.slice(0, 10).map((skill, idx) => (
                   <span 
                     key={idx} 
-                    className="skill-tag"
+                    className={`skill-tag ${isKeyTechnology(skill) ? 'key-skill' : ''}`}
                     style={{ animationDelay: `${(index * 0.1) + (idx * 0.05)}s` }}
                   >
                     {skill}
                   </span>
                 ))}
+                {category.items.length > 10 && (
+                  <span className="skill-tag more-skills">+{category.items.length - 10} more</span>
+                )}
               </div>
             </div>
           ))}

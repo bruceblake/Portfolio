@@ -18,7 +18,13 @@ const About = ({ portfolioData }) => {
         <div className="about-content">
           <div className="about-text">
             <p className="about-summary">
-              {portfolioData?.summary?.brief || 'Passionate software engineer with experience in full-stack development and a strong foundation in computer science.'}
+              {portfolioData?.summary?.brief ? 
+                (portfolioData.summary.brief.length > 200 ? 
+                  portfolioData.summary.brief.substring(0, 200) + '...' : 
+                  portfolioData.summary.brief
+                ) : 
+                'Passionate software engineer with experience in full-stack development and AI integration.'
+              }
             </p>
             
             <div className="about-details">
@@ -26,7 +32,7 @@ const About = ({ portfolioData }) => {
                 <User className="about-icon" />
                 <div>
                   <h3>Background</h3>
-                  <p>Computer Science student at Virginia Tech with a focus on software engineering and systems design.</p>
+                  <p><strong>Virginia Tech CS</strong> • GPA: 3.9/4.0 • Expected May 2026</p>
                 </div>
               </div>
               
@@ -34,7 +40,7 @@ const About = ({ portfolioData }) => {
                 <Code className="about-icon" />
                 <div>
                   <h3>Technical Focus</h3>
-                  <p>Specialized in full-stack development, cloud technologies, and building scalable applications.</p>
+                  <p><strong>Full-Stack</strong> • <strong>Cloud (AWS/GCP)</strong> • <strong>AI/ML Integration</strong></p>
                 </div>
               </div>
               
@@ -42,7 +48,7 @@ const About = ({ portfolioData }) => {
                 <Briefcase className="about-icon" />
                 <div>
                   <h3>Experience</h3>
-                  <p>Multiple internships including 2x at Google, working on impactful projects with real-world applications.</p>
+                  <p><strong>2x Google SWE Intern</strong> • <strong>10+ Production Projects</strong></p>
                 </div>
               </div>
             </div>
