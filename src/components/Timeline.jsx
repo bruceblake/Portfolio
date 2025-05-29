@@ -98,23 +98,7 @@ const Timeline = ({ portfolioData }) => {
       });
     }
 
-    // Add teams and accomplishments
-    if (portfolioData.teamsAndAccomplishments) {
-      portfolioData.teamsAndAccomplishments.forEach(item => {
-        const itemDate = item.date ? new Date(item.date) : new Date(item.duration?.start || '2023-01-01');
-        items.push({
-          id: `team-${item.name}`,
-          type: 'accomplishment',
-          date: itemDate,
-          endDate: item.duration?.end ? new Date(item.duration.end) : itemDate,
-          title: item.name,
-          subtitle: item.role || 'Achievement',
-          description: item.achievement,
-          details: item.details || [],
-          icon: '🏆'
-        });
-      });
-    }
+    // Removed teams and accomplishments to clean up timeline UI
 
     // Sort by date (most recent first)
     return items.sort((a, b) => b.date - a.date);
@@ -157,8 +141,7 @@ const Timeline = ({ portfolioData }) => {
     const colors = {
       experience: '#3b82f6',
       education: '#10b981',
-      project: '#8b5cf6',
-      accomplishment: '#f59e0b'
+      project: '#8b5cf6'
     };
     return colors[type] || '#6b7280';
   };
@@ -197,13 +180,6 @@ const Timeline = ({ portfolioData }) => {
           >
             🚀 Projects
             <span className="filter-count">{timelineItems.filter(item => item.type === 'project').length}</span>
-          </button>
-          <button 
-            className={`filter-btn ${filter === 'accomplishment' ? 'active' : ''}`}
-            onClick={() => setFilter('accomplishment')}
-          >
-            🏆 Achievements
-            <span className="filter-count">{timelineItems.filter(item => item.type === 'accomplishment').length}</span>
           </button>
           <button 
             className={`filter-btn featured-btn ${filter === 'featured' ? 'active' : ''}`}

@@ -296,7 +296,6 @@
 .timeline-item.experience .timeline-card::before { --type-color: #3b82f6; }
 .timeline-item.education .timeline-card::before { --type-color: #10b981; }
 .timeline-item.project .timeline-card::before { --type-color: #8b5cf6; }
-.timeline-item.accomplishment .timeline-card::before { --type-color: #f59e0b; }
 
 .timeline-item:hover .timeline-card {
   transform: translateY(-5px);
