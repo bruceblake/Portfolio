@@ -6,6 +6,17 @@ const Timeline = ({ portfolioData }) => {
   const [visibleItems, setVisibleItems] = useState(new Set());
   const timelineRef = useRef(null);
   const itemRefs = useRef([]);
+  
+  const primarySkills = ['TypeScript', 'React', 'Angular', 'Java', 'Python'];
+  
+  // Helper function to check if item involves primary skills
+  const involvesPrimarySkills = (technologies) => {
+    if (!technologies) return false;
+    const techLower = technologies.map(t => t.toLowerCase());
+    return primarySkills.some(skill => 
+      techLower.some(tech => tech.includes(skill.toLowerCase()))
+    );
+  };
 
   // Combine all timeline items from different sources
   const getTimelineItems = () => {
@@ -195,7 +206,7 @@ const Timeline = ({ portfolioData }) => {
               data-item-id={item.id}
               className={`timeline-item ${item.type} ${index % 2 === 0 ? 'left' : 'right'} ${
                 visibleItems.has(item.id) ? 'visible' : ''
-              }`}
+              } ${involvesPrimarySkills(item.technologies) ? 'primary-tech' : ''}`}
             >
               <div className="timeline-marker" style={{ backgroundColor: getTypeColor(item.type) }}>
                 <span className="timeline-icon">{item.icon}</span>

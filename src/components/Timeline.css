@@ -1,30 +1,58 @@
 .timeline-section {
   padding: 80px 0;
-  background: linear-gradient(135deg, #f5f7fa 0%, #e9ecef 100%);
+  background: #0f0f0f;
   min-height: 100vh;
+  position: relative;
+  overflow: hidden;
+}
+
+.timeline-section::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: 
+    radial-gradient(circle at 20% 80%, rgba(120, 119, 198, 0.3), transparent 50%),
+    radial-gradient(circle at 80% 20%, rgba(255, 119, 198, 0.3), transparent 50%),
+    radial-gradient(circle at 40% 40%, rgba(120, 219, 255, 0.2), transparent 50%);
+  animation: backgroundShift 20s ease-in-out infinite;
+}
+
+@keyframes backgroundShift {
+  0%, 100% { transform: translate(0, 0) scale(1); }
+  33% { transform: translate(-20px, -20px) scale(1.1); }
+  66% { transform: translate(20px, -10px) scale(0.9); }
 }
 
 .section-title {
   text-align: center;
-  font-size: 3rem;
+  font-size: 4rem;
   margin-bottom: 2rem;
-  color: #1a202c;
-  font-weight: 800;
+  font-weight: 900;
   text-transform: uppercase;
-  letter-spacing: 2px;
+  letter-spacing: 3px;
   position: relative;
+  background: linear-gradient(135deg, #667eea, #764ba2, #f093fb, #4facfe);
+  background-size: 200% 200%;
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  animation: gradient-shift 5s ease infinite;
 }
 
 .section-title::after {
-  content: '';
+  content: 'TIMELINE';
   position: absolute;
-  bottom: -10px;
+  top: 50%;
   left: 50%;
-  transform: translateX(-50%);
-  width: 100px;
-  height: 4px;
-  background: linear-gradient(90deg, #3b82f6, #8b5cf6);
-  border-radius: 2px;
+  transform: translate(-50%, -50%);
+  font-size: 8rem;
+  font-weight: 900;
+  color: rgba(255, 255, 255, 0.02);
+  z-index: -1;
+  letter-spacing: 20px;
 }
 
 /* Filter Buttons */
@@ -38,26 +66,48 @@
 
 .filter-btn {
   padding: 0.75rem 1.5rem;
-  border: 2px solid #e5e7eb;
-  background: white;
+  border: 2px solid rgba(255, 255, 255, 0.2);
+  background: rgba(255, 255, 255, 0.05);
+  backdrop-filter: blur(10px);
   border-radius: 25px;
   font-size: 0.95rem;
   font-weight: 600;
+  color: white;
   cursor: pointer;
-  transition: all 0.3s ease;
+  transition: all 0.3s cubic-bezier(0.23, 1, 0.32, 1);
   position: relative;
   overflow: hidden;
 }
 
+.filter-btn::before {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 0;
+  height: 0;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.2);
+  transform: translate(-50%, -50%);
+  transition: width 0.6s, height 0.6s;
+}
+
+.filter-btn:hover::before {
+  width: 300px;
+  height: 300px;
+}
+
 .filter-btn:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+  transform: translateY(-3px) scale(1.05);
+  box-shadow: 0 10px 30px rgba(255, 255, 255, 0.1);
+  border-color: rgba(255, 255, 255, 0.4);
 }
 
 .filter-btn.active {
-  background: linear-gradient(135deg, #3b82f6, #8b5cf6);
+  background: linear-gradient(135deg, #667eea, #764ba2);
   color: white;
   border-color: transparent;
+  box-shadow: 0 5px 20px rgba(102, 126, 234, 0.4);
 }
 
 /* Timeline Container */
@@ -75,8 +125,20 @@
   transform: translateX(-50%);
   width: 4px;
   height: 100%;
-  background: linear-gradient(180deg, #3b82f6 0%, #8b5cf6 50%, #f59e0b 100%);
-  opacity: 0.3;
+  background: linear-gradient(180deg, #667eea 0%, #764ba2 25%, #f093fb 50%, #4facfe 75%, #667eea 100%);
+  opacity: 0.5;
+  animation: lineGlow 3s ease-in-out infinite;
+}
+
+@keyframes lineGlow {
+  0%, 100% { 
+    opacity: 0.3;
+    filter: blur(1px);
+  }
+  50% { 
+    opacity: 0.8;
+    filter: blur(2px) drop-shadow(0 0 10px rgba(102, 126, 234, 0.8));
+  }
 }
 
 /* Timeline Items */
@@ -137,7 +199,7 @@
 
 .timeline-date {
   font-size: 0.9rem;
-  color: #6b7280;
+  color: rgba(255, 255, 255, 0.6);
   font-weight: 600;
   margin-bottom: 0.5rem;
   text-transform: uppercase;
@@ -146,11 +208,13 @@
 
 /* Timeline Card */
 .timeline-card {
-  background: white;
+  background: rgba(255, 255, 255, 0.05);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
   padding: 2rem;
-  border-radius: 15px;
-  box-shadow: 0 5px 20px rgba(0, 0, 0, 0.1);
-  transition: all 0.3s ease;
+  border-radius: 20px;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+  transition: all 0.4s cubic-bezier(0.23, 1, 0.32, 1);
   position: relative;
   overflow: hidden;
   text-align: left;
@@ -176,28 +240,47 @@
   box-shadow: 0 15px 40px rgba(0, 0, 0, 0.15);
 }
 
+/* Highlight items with primary technologies */
+.timeline-item.primary-tech .timeline-card {
+  border: 2px solid var(--primary);
+  position: relative;
+}
+
+.timeline-item.primary-tech .timeline-card::after {
+  content: '⭐ Featured Tech';
+  position: absolute;
+  top: -12px;
+  right: 20px;
+  background: linear-gradient(135deg, var(--primary), var(--accent));
+  color: white;
+  padding: 0.25rem 0.75rem;
+  border-radius: 15px;
+  font-size: 0.75rem;
+  font-weight: 600;
+}
+
 .timeline-title {
   font-size: 1.5rem;
   font-weight: 700;
-  color: #1a202c;
+  color: white;
   margin-bottom: 0.5rem;
 }
 
 .timeline-subtitle {
   font-size: 1.1rem;
-  color: #4b5563;
+  color: rgba(255, 255, 255, 0.8);
   font-weight: 600;
   margin-bottom: 0.5rem;
 }
 
 .timeline-location {
   font-size: 0.9rem;
-  color: #6b7280;
+  color: rgba(255, 255, 255, 0.6);
   margin-bottom: 1rem;
 }
 
 .timeline-description {
-  color: #4b5563;
+  color: rgba(255, 255, 255, 0.7);
   line-height: 1.6;
   margin-bottom: 1rem;
 }
@@ -211,18 +294,20 @@
 }
 
 .tech-tag {
-  background: #f3f4f6;
-  color: #374151;
+  background: rgba(255, 255, 255, 0.1);
+  color: white;
   padding: 0.25rem 0.75rem;
+  border: 1px solid rgba(255, 255, 255, 0.2);
   border-radius: 15px;
   font-size: 0.85rem;
   font-weight: 500;
-  transition: all 0.2s ease;
+  transition: all 0.3s ease;
 }
 
 .tech-tag:hover {
-  background: #e5e7eb;
+  background: rgba(255, 255, 255, 0.2);
   transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(255, 255, 255, 0.1);
 }
 
 /* Details */

@@ -1,114 +1,123 @@
-import React from 'react';
-import { Code, Database, Cloud, Wrench, Layers } from 'lucide-react';
+import React, { useEffect, useRef } from 'react';
+import { Code, Database, Cloud, Wrench, Layers, Brain, Globe, Zap } from 'lucide-react';
 import './Skills.css';
 
 const Skills = ({ portfolioData }) => {
+  const skillsRef = useRef(null);
   const skills = portfolioData?.skills || {};
+  
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            entry.target.classList.add('animate-in');
+          }
+        });
+      },
+      { threshold: 0.1 }
+    );
+
+    const skillElements = skillsRef.current?.querySelectorAll('.skill-category, .skill-tag');
+    skillElements?.forEach(el => observer.observe(el));
+
+    return () => observer.disconnect();
+  }, []);
   
   const skillCategories = [
     {
-      title: 'Programming Languages',
+      title: 'Languages',
       icon: <Code />,
-      items: skills.programmingLanguages?.map(lang => ({
-        name: lang.language,
-        proficiency: lang.proficiency
-      })) || [],
-      color: 'primary'
+      items: skills.programmingLanguages?.map(lang => 
+        typeof lang === 'string' ? lang : lang.language
+      ) || [],
+      color: 'gradient-1'
     },
     {
-      title: 'Frameworks & Libraries',
+      title: 'Frontend',
+      icon: <Globe />,
+      items: skills.frameworksAndLibraries?.filter(fw => 
+        ['Frontend', 'Mobile'].some(type => fw.type?.includes(type))
+      ).map(fw => fw.name) || [],
+      color: 'gradient-2'
+    },
+    {
+      title: 'Backend',
       icon: <Layers />,
-      items: skills.frameworksAndLibraries?.map(fw => ({
-        name: fw.name,
-        proficiency: fw.expertise
-      })) || [],
-      color: 'accent'
+      items: skills.frameworksAndLibraries?.filter(fw => 
+        fw.type?.includes('Backend')
+      ).map(fw => fw.name) || [],
+      color: 'gradient-3'
     },
     {
-      title: 'Databases & Storage',
+      title: 'Databases',
       icon: <Database />,
-      items: skills.databasesAndStorage?.map(db => ({
-        name: db.name || db,
-        proficiency: db.expertise || 'Proficient'
-      })) || [],
-      color: 'success'
+      items: skills.databasesAndStorage?.map(db => 
+        typeof db === 'string' ? db : db.name
+      ) || [],
+      color: 'gradient-4'
     },
     {
-      title: 'Tools & Platforms',
-      icon: <Wrench />,
-      items: skills.toolsAndPlatforms?.map(tool => ({
-        name: tool,
-        proficiency: 'Proficient'
-      })) || [],
-      color: 'info'
+      title: 'AI/ML',
+      icon: <Brain />,
+      items: skills.toolsAndPlatforms?.filter(tool => 
+        tool.category?.includes('AI')
+      ).map(tool => tool.name) || [],
+      color: 'gradient-5'
     },
     {
-      title: 'Methodologies',
-      icon: <Cloud />,
-      items: skills.methodologies?.map(method => ({
-        name: method,
-        proficiency: 'Experienced'
-      })) || [],
-      color: 'warning'
+      title: 'DevOps',
+      icon: <Zap />,
+      items: skills.toolsAndPlatforms?.filter(tool => 
+        ['Containerization', 'CI/CD', 'Version Control'].some(cat => tool.category?.includes(cat))
+      ).map(tool => tool.name) || [],
+      color: 'gradient-6'
     }
   ];
 
-  const getProficiencyClass = (proficiency) => {
-    const level = proficiency?.toLowerCase() || '';
-    if (level.includes('expert')) return 'expert';
-    if (level.includes('advanced')) return 'advanced';
-    if (level.includes('proficient')) return 'intermediate';
-    if (level.includes('intermediate')) return 'intermediate';
-    return 'beginner';
-  };
-
   return (
-    <section id="skills" className="skills">
+    <section id="skills" className="skills" ref={skillsRef}>
       <div className="container">
-        <h2 className="section-title">Technical Skills</h2>
+        <h2 className="section-title">
+          <span className="title-text">Technical Arsenal</span>
+          <span className="title-bg">SKILLS</span>
+        </h2>
         
         <div className="skills-grid">
           {skillCategories.map((category, index) => (
-            <div key={index} className={`skill-category ${category.color}`}>
+            <div 
+              key={index} 
+              className={`skill-category ${category.color}`}
+              style={{ animationDelay: `${index * 0.1}s` }}
+            >
               <div className="category-header">
-                <div className="category-icon">{category.icon}</div>
+                <div className="category-icon-wrapper">
+                  <div className="icon-bg"></div>
+                  {category.icon}
+                </div>
                 <h3 className="category-title">{category.title}</h3>
               </div>
               
-              <div className="skill-items">
+              <div className="skill-tags">
                 {category.items.map((skill, idx) => (
-                  <div 
+                  <span 
                     key={idx} 
-                    className={`skill-item ${getProficiencyClass(skill.proficiency)}`}
+                    className="skill-tag"
+                    style={{ animationDelay: `${(index * 0.1) + (idx * 0.05)}s` }}
                   >
-                    <span className="skill-name">{skill.name}</span>
-                    <div className="skill-level">
-                      <div className="skill-level-bar"></div>
-                    </div>
-                  </div>
+                    {skill}
+                  </span>
                 ))}
               </div>
             </div>
           ))}
         </div>
-        
-        <div className="skills-legend">
-          <span className="legend-item">
-            <span className="legend-dot expert"></span>
-            Expert
-          </span>
-          <span className="legend-item">
-            <span className="legend-dot advanced"></span>
-            Advanced
-          </span>
-          <span className="legend-item">
-            <span className="legend-dot intermediate"></span>
-            Intermediate
-          </span>
-          <span className="legend-item">
-            <span className="legend-dot beginner"></span>
-            Learning
-          </span>
+
+        {/* Floating background elements */}
+        <div className="skills-bg-shapes">
+          <div className="shape shape-1"></div>
+          <div className="shape shape-2"></div>
+          <div className="shape shape-3"></div>
         </div>
       </div>
     </section>

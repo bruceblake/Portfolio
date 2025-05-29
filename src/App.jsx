@@ -13,7 +13,7 @@ function App() {
   const [error, setError] = useState(null);
 
   useEffect(() => {
-    fetch('/bruce-blake-data.json')
+    fetch('./bruce-blake-data.json')
       .then(response => {
         if (!response.ok) {
           throw new Error('Failed to load portfolio data');

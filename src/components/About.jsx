@@ -18,7 +18,7 @@ const About = ({ portfolioData }) => {
         <div className="about-content">
           <div className="about-text">
             <p className="about-summary">
-              {portfolioData?.summary || 'Passionate software engineer with experience in full-stack development and a strong foundation in computer science.'}
+              {portfolioData?.summary?.brief || 'Passionate software engineer with experience in full-stack development and a strong foundation in computer science.'}
             </p>
             
             <div className="about-details">

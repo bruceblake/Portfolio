@@ -1,27 +1,40 @@
 import React from 'react';
 import { Mail, Github, Linkedin, ChevronDown } from 'lucide-react';
+import ParticleBackground from './ParticleBackground';
 import './Hero.css';
 
 const Hero = ({ portfolioData }) => {
-  const scrollToAbout = () => {
-    document.getElementById('about')?.scrollIntoView({ behavior: 'smooth' });
+  const scrollToTimeline = () => {
+    document.getElementById('timeline')?.scrollIntoView({ behavior: 'smooth' });
   };
+
+  const primarySkills = ['TypeScript', 'React', 'Angular', 'Java', 'Python'];
 
   return (
     <section id="hero" className="hero">
+      <ParticleBackground />
       <div className="container">
         <div className="hero-content">
           <h1 className="hero-title">
             Hi, I'm <span className="hero-name">{portfolioData?.personal?.name || 'Bruce Blake'}</span>
           </h1>
           <h2 className="hero-subtitle">{portfolioData?.personal?.title || 'Software Engineer'}</h2>
+          
+          <div className="hero-skills">
+            {primarySkills.map((skill, index) => (
+              <span key={index} className="hero-skill-badge">
+                {skill}
+              </span>
+            ))}
+          </div>
+          
           <p className="hero-description">
             {portfolioData?.summary?.brief?.split('.')[0] || 'Passionate about building innovative solutions'}
           </p>
           
           <div className="hero-cta">
-            <a href="#contact" className="btn btn-primary">Get In Touch</a>
-            <a href="#projects" className="btn btn-secondary">View Projects</a>
+            <a href="#timeline" className="btn btn-primary">View My Journey</a>
+            <a href="#contact" className="btn btn-secondary">Get In Touch</a>
           </div>
           
           <div className="hero-links">
@@ -37,7 +50,7 @@ const Hero = ({ portfolioData }) => {
           </div>
         </div>
         
-        <button className="scroll-indicator" onClick={scrollToAbout} aria-label="Scroll to about section">
+        <button className="scroll-indicator" onClick={scrollToTimeline} aria-label="Scroll to timeline section">
           <ChevronDown size={24} />
         </button>
       </div>
