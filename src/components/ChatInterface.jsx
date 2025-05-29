@@ -4,7 +4,7 @@ import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
 import { Prism as SyntaxHighlighter } from 'react-syntax-highlighter';
 import { vscDarkPlus } from 'react-syntax-highlighter/dist/esm/styles/prism';
-import { ragSystem } from '../utils/ragSystem';
+import { processQuery } from '../utils/ragSystem';
 import './ChatInterface.css';
 
 const ChatInterface = () => {
@@ -52,9 +52,9 @@ const ChatInterface = () => {
     setMessages(prev => [...prev, { role: 'user', content: userMessage }]);
     setIsLoading(true);
 
-    // Get response from RAG system
-    const response = ragSystem.search(userMessage);
-    const typingDelay = ragSystem.getTypingDelay(response);
+    // Get response from enhanced RAG system
+    const response = processQuery(userMessage);
+    const typingDelay = Math.min(200 + response.length * 2, 800);
 
     // Simulate typing delay
     setTimeout(() => {

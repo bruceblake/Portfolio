@@ -1,341 +1,494 @@
-// Offline RAG System for Portfolio - Pure Data-Driven Version
-// Everything comes from the JSON data file
-
+import Fuse from 'fuse.js';
 import portfolioData from '../../public/bruce-blake-data.json' with { type: 'json' };
 
-// Create searchable chunks from data
-function createSearchableChunks(data) {
+// Enhanced chunking strategy
+function createChunks(data) {
   const chunks = [];
   
-  // Experience chunks
+  // Personal info chunk
+  chunks.push({
+    id: 'personal',
+    type: 'personal',
+    content: `${data.personal.name} ${data.personal.title} ${data.personal.currentFocus}`,
+    metadata: {
+      section: 'personal',
+      weight: 1.5
+    },
+    data: {...data.personal, ...data.links}
+  });
+  
+  // Experience chunks - more granular
   data.experience.forEach((exp, idx) => {
-    const duration = exp.status === 'Upcoming' 
-      ? `Upcoming (${exp.duration.start})`
-      : `${exp.duration.start} - ${exp.duration.end}`;
-    
-    const responsibilities = exp.responsibilities 
-      ? exp.responsibilities.join(' ')
-      : exp.anticipatedResponsibilities 
-      ? exp.anticipatedResponsibilities.join(' ')
-      : '';
-    
-    const achievements = exp.achievements 
-      ? exp.achievements.join(' ')
-      : '';
-    
+    // Main experience chunk
     chunks.push({
-      id: `experience-${idx}`,
-      category: 'experience',
-      content: `${exp.title} at ${exp.company}${exp.team ? ` (${exp.team})` : ''} in ${exp.location}. ${duration}. ${exp.description} ${responsibilities} ${achievements} Technologies: ${exp.technologies.join(', ')}.`,
-      metadata: { 
-        type: 'experience', 
+      id: `exp-${idx}`,
+      type: 'experience',
+      content: `${exp.title} ${exp.company} ${exp.description || ''}`,
+      metadata: {
+        section: 'experience',
         company: exp.company,
         title: exp.title,
-        technologies: exp.technologies,
-        rawData: exp
-      }
+        weight: 2.0
+      },
+      data: exp
+    });
+    
+    // Individual responsibility chunks
+    exp.responsibilities?.forEach((resp, respIdx) => {
+      chunks.push({
+        id: `exp-${idx}-resp-${respIdx}`,
+        type: 'responsibility',
+        content: resp,
+        metadata: {
+          section: 'experience',
+          company: exp.company,
+          title: exp.title,
+          weight: 1.8
+        },
+        parentData: exp
+      });
+    });
+    
+    // Individual achievement chunks
+    exp.achievements?.forEach((ach, achIdx) => {
+      chunks.push({
+        id: `exp-${idx}-ach-${achIdx}`,
+        type: 'achievement',
+        content: ach,
+        metadata: {
+          section: 'experience',
+          company: exp.company,
+          title: exp.title,
+          weight: 1.9
+        },
+        parentData: exp
+      });
     });
   });
-
-  // Projects chunks
-  data.technicalProjects.forEach((project, idx) => {
+  
+  // Project chunks - more granular
+  data.technicalProjects.forEach((proj, idx) => {
+    // Main project chunk
     chunks.push({
-      id: `project-${idx}`,
-      category: 'project',
-      content: `Project: ${project.name}. ${project.description} ${project.technicalHighlights.join(' ')} Technologies: ${project.technologies.join(', ')}.`,
+      id: `proj-${idx}`,
+      type: 'project',
+      content: `${proj.name} ${proj.description}`,
       metadata: {
-        type: 'project',
-        name: project.name,
-        category: project.category,
-        technologies: project.technologies,
-        rawData: project
-      }
+        section: 'projects',
+        title: proj.name,
+        weight: 1.8
+      },
+      data: proj
+    });
+    
+    // Technology chunks
+    const techString = proj.technologies.join(' ');
+    chunks.push({
+      id: `proj-${idx}-tech`,
+      type: 'technology',
+      content: techString,
+      metadata: {
+        section: 'projects',
+        title: proj.name,
+        weight: 1.6
+      },
+      parentData: proj
+    });
+    
+    // Technical highlights chunks
+    proj.technicalHighlights?.forEach((highlight, highlightIdx) => {
+      chunks.push({
+        id: `proj-${idx}-highlight-${highlightIdx}`,
+        type: 'highlight',
+        content: highlight,
+        metadata: {
+          section: 'projects',
+          title: proj.name,
+          weight: 1.7
+        },
+        parentData: proj
+      });
     });
   });
-
+  
   // Skills chunks
-  chunks.push({
-    id: 'skills-languages',
-    category: 'skills',
-    content: `Programming languages: ${data.skills.programmingLanguages.map(l => `${l.language} (${l.proficiency})`).join(', ')}`,
-    metadata: { 
-      type: 'skills', 
-      subtype: 'languages',
-      rawData: data.skills.programmingLanguages
+  // Programming languages
+  if (data.skills.programmingLanguages) {
+    const langContent = data.skills.programmingLanguages.map(l => `${l.language} ${l.proficiency}`).join(' ');
+    chunks.push({
+      id: 'skills-languages',
+      type: 'skills',
+      content: `Programming Languages ${langContent}`,
+      metadata: {
+        section: 'skills',
+        category: 'programmingLanguages',
+        weight: 1.5
+      },
+      data: { category: 'Programming Languages', items: data.skills.programmingLanguages }
+    });
+  }
+  
+  // Frameworks
+  if (data.skills.frameworksAndLibraries) {
+    const frameworkContent = data.skills.frameworksAndLibraries.map(f => `${f.name} ${f.expertise}`).join(' ');
+    chunks.push({
+      id: 'skills-frameworks',
+      type: 'skills',
+      content: `Frameworks Libraries ${frameworkContent}`,
+      metadata: {
+        section: 'skills',
+        category: 'frameworksAndLibraries',
+        weight: 1.5
+      },
+      data: { category: 'Frameworks & Libraries', items: data.skills.frameworksAndLibraries }
+    });
+  }
+  
+  // Other skills categories
+  ['databasesAndStorage', 'toolsAndPlatforms', 'methodologies'].forEach(category => {
+    if (data.skills[category]) {
+      const content = Array.isArray(data.skills[category]) ? data.skills[category].join(' ') : '';
+      chunks.push({
+        id: `skills-${category}`,
+        type: 'skills',
+        content: `${category} ${content}`,
+        metadata: {
+          section: 'skills',
+          category: category,
+          weight: 1.5
+        },
+        data: { category, items: data.skills[category] }
+      });
     }
   });
-
-  chunks.push({
-    id: 'skills-frameworks',
-    category: 'skills',
-    content: `Frameworks and libraries: ${data.skills.frameworksAndLibraries.map(f => `${f.name} (${f.expertise})`).join(', ')}`,
-    metadata: { 
-      type: 'skills', 
-      subtype: 'frameworks',
-      rawData: data.skills.frameworksAndLibraries
-    }
-  });
-
+  
   // Education chunks
   data.education.forEach((edu, idx) => {
     chunks.push({
-      id: `education-${idx}`,
-      category: 'education',
-      content: `${edu.degree} at ${edu.institution}. GPA: ${edu.gpaDetails}. Graduating: ${edu.graduationDate}. Activities: ${edu.activitiesAndSocieties.join(', ')}`,
-      metadata: { 
-        type: 'education', 
-        institution: edu.institution,
-        rawData: edu
-      }
+      id: `edu-${idx}`,
+      type: 'education',
+      content: `${edu.degree} ${edu.institution} ${edu.minor || ''} ${edu.gpaDetails || ''}`,
+      metadata: {
+        section: 'education',
+        weight: 1.4
+      },
+      data: edu
     });
   });
-
-  // Accomplishments chunks
-  data.teamsAndAccomplishments.forEach((acc, idx) => {
+  
+  // Teams and Accomplishments chunks
+  data.teamsAndAccomplishments?.forEach((acc, idx) => {
     chunks.push({
-      id: `accomplishment-${idx}`,
-      category: 'accomplishment',
-      content: `${acc.title}. ${acc.distinction || ''} ${acc.description}`,
-      metadata: { 
-        type: 'accomplishment',
-        rawData: acc
-      }
+      id: `acc-${idx}`,
+      type: 'accomplishment',
+      content: `${acc.title} ${acc.distinction || ''} ${acc.description || ''}`,
+      metadata: {
+        section: 'accomplishments',
+        weight: 1.3
+      },
+      data: acc
     });
   });
-
-  // Personal/Contact chunk
-  chunks.push({
-    id: 'personal',
-    category: 'personal',
-    content: `Contact: ${data.personal.email}, ${data.personal.phone}. Location: ${data.personal.location}. Interests: ${data.personal.interests.join(', ')}`,
-    metadata: {
-      type: 'personal',
-      rawData: data.personal
-    }
-  });
-
-  // Summary chunks
-  chunks.push({
-    id: 'summary',
-    category: 'summary',
-    content: data.summary.brief,
-    metadata: {
-      type: 'summary',
-      subtype: 'brief',
-      rawData: data.summary
-    }
-  });
-
-  chunks.push({
-    id: 'unique-value',
-    category: 'summary',
-    content: data.summary.uniqueValue,
-    metadata: {
-      type: 'summary',
-      subtype: 'unique',
-      rawData: data.summary
-    }
-  });
-
+  
   return chunks;
 }
 
-// Extract keywords from query
-function extractKeywords(text) {
-  const stopWords = new Set([
-    'a', 'an', 'and', 'are', 'as', 'at', 'be', 'by', 'for', 'from',
-    'has', 'he', 'in', 'is', 'it', 'its', 'of', 'on', 'that', 'the',
-    'to', 'was', 'will', 'with', 'what', 'where', 'when', 'who', 'why',
-    'how', 'can', 'could', 'should', 'would', 'does', 'did', 'about',
-    'tell', 'me', 'please', 'bruce', 'blake', 'bruces', "bruce's"
-  ]);
+// TF-IDF implementation
+class TFIDFCalculator {
+  constructor(chunks) {
+    this.chunks = chunks;
+    this.documentFrequency = {};
+    this.totalDocuments = chunks.length;
+    this.calculateDocumentFrequency();
+  }
+  
+  calculateDocumentFrequency() {
+    this.chunks.forEach(chunk => {
+      const words = this.tokenize(chunk.content);
+      const uniqueWords = [...new Set(words)];
+      uniqueWords.forEach(word => {
+        this.documentFrequency[word] = (this.documentFrequency[word] || 0) + 1;
+      });
+    });
+  }
+  
+  tokenize(text) {
+    return text.toLowerCase()
+      .replace(/[^\w\s]/g, ' ')
+      .split(/\s+/)
+      .filter(word => word.length > 2);
+  }
+  
+  calculateTFIDF(chunk, query) {
+    const chunkWords = this.tokenize(chunk.content);
+    const queryWords = this.tokenize(query);
+    
+    const tf = {};
+    chunkWords.forEach(word => {
+      tf[word] = (tf[word] || 0) + 1;
+    });
+    
+    // Normalize TF
+    const maxTF = Math.max(...Object.values(tf));
+    Object.keys(tf).forEach(word => {
+      tf[word] = tf[word] / maxTF;
+    });
+    
+    // Calculate TF-IDF score
+    let score = 0;
+    queryWords.forEach(word => {
+      if (tf[word]) {
+        const idf = Math.log(this.totalDocuments / (this.documentFrequency[word] || 1));
+        score += tf[word] * idf;
+      }
+    });
+    
+    return score;
+  }
+}
 
-  return text
-    .toLowerCase()
-    .replace(/[^\w\s]/g, ' ')
+// Fuzzy search configuration
+const fuseOptions = {
+  includeScore: true,
+  threshold: 0.4,
+  keys: ['content'],
+  minMatchCharLength: 2
+};
+
+// Keyword extraction
+function extractKeywords(query) {
+  const stopWords = new Set([
+    'what', 'who', 'where', 'when', 'why', 'how', 'is', 'are', 'was', 'were',
+    'the', 'a', 'an', 'and', 'or', 'but', 'in', 'on', 'at', 'to', 'for',
+    'of', 'with', 'by', 'from', 'about', 'tell', 'me', 'show', 'list',
+    'give', 'find', 'search', 'get', 'all', 'any', 'some', 'his', 'her'
+  ]);
+  
+  return query.toLowerCase()
     .split(/\s+/)
     .filter(word => word.length > 2 && !stopWords.has(word));
 }
 
-// Calculate relevance score
-function calculateSimilarity(queryKeywords, chunkContent) {
-  const chunkLower = chunkContent.toLowerCase();
-  let score = 0;
-
-  queryKeywords.forEach(keyword => {
-    if (chunkLower.includes(keyword)) {
-      score += 10;
-      const matches = (chunkLower.match(new RegExp(keyword, 'g')) || []).length;
-      score += (matches - 1) * 2;
-    }
-  });
-
-  return score;
-}
-
-// Search and rank chunks
-function searchChunks(query, chunks, topK = 3) {
-  const queryKeywords = extractKeywords(query);
-  const lowerQuery = query.toLowerCase();
+// Main search function
+function search(query) {
+  const chunks = createChunks(portfolioData);
+  const keywords = extractKeywords(query);
   
+  // Initialize TF-IDF calculator
+  const tfidfCalculator = new TFIDFCalculator(chunks);
+  
+  // Initialize Fuse.js
+  const fuse = new Fuse(chunks, fuseOptions);
+  
+  // Calculate scores for each chunk
   const scoredChunks = chunks.map(chunk => {
-    let score = calculateSimilarity(queryKeywords, chunk.content);
+    // TF-IDF score
+    const tfidfScore = tfidfCalculator.calculateTFIDF(chunk, query);
     
-    // Boost scores for category matches
-    if (lowerQuery.includes('experience') && chunk.category === 'experience') score += 20;
-    if (lowerQuery.includes('project') && chunk.category === 'project') score += 20;
-    if (lowerQuery.includes('skill') && chunk.category === 'skills') score += 20;
-    if (lowerQuery.includes('education') && chunk.category === 'education') score += 20;
-    if (lowerQuery.includes('accomplishment') && chunk.category === 'accomplishment') score += 20;
-    if ((lowerQuery.includes('contact') || lowerQuery.includes('email')) && chunk.category === 'personal') score += 30;
-    if ((lowerQuery.includes('unique') || lowerQuery.includes('stand out')) && chunk.metadata.subtype === 'unique') score += 30;
+    // Fuzzy search score
+    const fuseResults = fuse.search(chunk.content);
+    const fuzzyScore = fuseResults.length > 0 ? (1 - fuseResults[0].score) : 0;
     
-    // Company-specific boosts
-    if (lowerQuery.includes('google') && chunk.content.toLowerCase().includes('google')) score += 30;
-    if ((lowerQuery.includes('freelance') || lowerQuery.includes('sushi')) && chunk.content.toLowerCase().includes('sushi')) score += 30;
+    // Keyword match score
+    const chunkKeywords = extractKeywords(chunk.content);
+    const keywordMatches = keywords.filter(kw => 
+      chunkKeywords.some(ck => ck.includes(kw) || kw.includes(ck))
+    ).length;
+    const keywordScore = keywordMatches / Math.max(keywords.length, 1);
     
-    return { ...chunk, score };
+    // Section weight
+    const sectionWeight = chunk.metadata.weight || 1;
+    
+    // Combined score
+    const combinedScore = (
+      tfidfScore * 0.3 +
+      fuzzyScore * 0.3 +
+      keywordScore * 0.2 +
+      sectionWeight * 0.2
+    );
+    
+    return {
+      chunk,
+      score: combinedScore,
+      tfidfScore,
+      fuzzyScore,
+      keywordScore
+    };
   });
-
-  return scoredChunks
+  
+  // Sort by score and get top results
+  const topChunks = scoredChunks
     .sort((a, b) => b.score - a.score)
-    .slice(0, topK)
-    .filter(chunk => chunk.score > 0);
+    .slice(0, 10);
+  
+  // Group by type for comprehensive responses
+  const groupedResults = {};
+  topChunks.forEach(({ chunk }) => {
+    const type = chunk.metadata.section;
+    if (!groupedResults[type]) {
+      groupedResults[type] = [];
+    }
+    groupedResults[type].push(chunk);
+  });
+  
+  return { topChunks, groupedResults, keywords };
 }
 
-// Generate response from chunks using actual data
-function generateResponse(query, relevantChunks) {
-  if (relevantChunks.length === 0) {
-    return "No information found. Try: experience, projects, skills, education";
-  }
-
+// Response generation
+function generateResponse(query, conversationHistory = []) {
+  const { topChunks, groupedResults, keywords } = search(query);
+  
+  // Check for specific intents
   const lowerQuery = query.toLowerCase();
   
-  // For specific queries, format the raw data nicely
-  const topChunk = relevantChunks[0];
+  // Contact info - highest priority
+  if (lowerQuery.includes('contact') || lowerQuery.includes('email') || lowerQuery.includes('phone') || 
+      keywords.some(kw => ['contact', 'email', 'phone', 'linkedin', 'github'].includes(kw))) {
+    const personal = portfolioData.personal;
+    const links = portfolioData.links;
+    return `**Contact Information:**\n\n` +
+      `• Email: ${personal.email}\n` +
+      `• Phone: ${personal.phone}\n` +
+      `• LinkedIn: [${links.linkedin}](${links.linkedin})\n` +
+      `• GitHub: [${links.github}](${links.github})`;
+  }
   
-  // Experience queries
-  if (topChunk.category === 'experience' && topChunk.metadata.rawData) {
-    const exp = topChunk.metadata.rawData;
-    const duration = exp.status === 'Upcoming' ? `**${exp.status}**` : `${exp.duration.start}-${exp.duration.end}`;
-    const highlight = exp.achievements ? exp.achievements[0] : 
-                     exp.responsibilities ? exp.responsibilities[0] : 
-                     exp.description;
-    return `**${exp.title}** at ${exp.company}${exp.team ? ` (${exp.team})` : ''} (${duration})\n${highlight}\nTech: ${exp.technologies.slice(0, 4).join(', ')}`;
-  }
-
-  // Project queries
-  if (topChunk.category === 'project' && topChunk.metadata.rawData) {
-    const proj = topChunk.metadata.rawData;
-    const highlight = proj.technicalHighlights[0];
-    return `**${proj.name}**\n${highlight}\nTech: ${proj.technologies.slice(0, 4).join(', ')}`;
-  }
-
-  // Skills queries
-  if (topChunk.category === 'skills') {
-    const langs = relevantChunks.find(c => c.metadata.subtype === 'languages');
-    const frameworks = relevantChunks.find(c => c.metadata.subtype === 'frameworks');
-    
-    let response = '';
-    if (langs && langs.metadata.rawData) {
-      const expertLangs = langs.metadata.rawData
-        .filter(l => l.proficiency === 'Expert')
-        .slice(0, 4)
-        .map(l => `**${l.language}**`)
-        .join(', ');
-      response += `**Languages:** ${expertLangs}\n`;
-    }
-    if (frameworks && frameworks.metadata.rawData) {
-      const topFrameworks = frameworks.metadata.rawData
-        .filter(f => f.expertise === 'Advanced' || f.expertise === 'Proficient')
-        .slice(0, 4)
-        .map(f => f.name)
-        .join(', ');
-      response += `**Frameworks:** ${topFrameworks}`;
-    }
-    return response.trim();
-  }
-
-  // Education queries
-  if (topChunk.category === 'education' && topChunk.metadata.rawData) {
-    const edu = topChunk.metadata.rawData;
-    return `**${edu.institution}** - ${edu.degree}\n**GPA:** ${edu.gpaDetails}\n**Graduating:** ${edu.graduationDate}`;
-  }
-
-  // Contact queries
-  if (topChunk.category === 'personal' && topChunk.metadata.rawData) {
-    const personal = topChunk.metadata.rawData;
-    return `📧 ${personal.email}\n📱 ${personal.phone}`;
-  }
-
-  // Accomplishments
-  if (topChunk.category === 'accomplishment' && topChunk.metadata.rawData) {
-    const acc = topChunk.metadata.rawData;
-    return `**${acc.title}**\n${acc.distinction || acc.description}`;
-  }
-
-  // Summary/unique value
-  if (topChunk.category === 'summary') {
-    return topChunk.content;
-  }
-
-  // Multiple relevant items - show all
-  if (relevantChunks.length > 1 && relevantChunks[0].category === relevantChunks[1].category) {
-    return relevantChunks.slice(0, 3).map(chunk => {
-      if (chunk.metadata.rawData) {
-        const data = chunk.metadata.rawData;
-        if (chunk.category === 'experience') {
-          const duration = data.status === 'Upcoming' ? 'Upcoming' : `${data.duration.start}-${data.duration.end}`;
-          return `**${data.title}** at ${data.company} (${duration})`;
-        } else if (chunk.category === 'project') {
-          return `**${data.name}** - ${data.category}`;
-        } else if (chunk.category === 'accomplishment') {
-          return `**${data.title}**`;
-        }
-      }
-      return chunk.content.substring(0, 100) + '...';
+  // Education - check before experience
+  if (lowerQuery.includes('education') || lowerQuery.includes('degree') || lowerQuery.includes('university') ||
+      lowerQuery.includes('school') || lowerQuery.includes('gpa') || lowerQuery.includes('virginia tech')) {
+    return `**Education:**\n\n` + portfolioData.education.map(edu => {
+      return `• **${edu.degree}**\n  ${edu.institution} (${edu.graduationDate})\n  ${edu.gpaDetails || ''}`;
     }).join('\n\n');
   }
-
-  // Fallback to chunk content
-  return topChunk.content.substring(0, 200) + '...';
-}
-
-// Main RAG class with conversation memory
-class OfflineRAG {
-  constructor() {
-    this.chunks = createSearchableChunks(portfolioData);
-    this.initialized = true;
-    this.conversationHistory = [];
-  }
-
-  search(query) {
-    if (!query || query.trim().length === 0) {
-      return "Ask about: experience, projects, skills, or education.";
-    }
-
-    // Add query to history for context
-    this.conversationHistory.push({ role: 'user', content: query });
-
-    // Search with context awareness
-    const relevantChunks = searchChunks(query, this.chunks);
-    const response = generateResponse(query, relevantChunks);
+  
+  // Skills - check before experience
+  if (lowerQuery.includes('skill') || lowerQuery.includes('technology') || lowerQuery.includes('language') ||
+      lowerQuery.includes('framework') || lowerQuery.includes('programming')) {
+    const skills = portfolioData.skills;
+    let response = `**Technical Skills:**\n\n`;
     
-    // Add response to history
-    this.conversationHistory.push({ role: 'assistant', content: response });
-    
-    // Keep only last 10 exchanges for memory efficiency
-    if (this.conversationHistory.length > 20) {
-      this.conversationHistory = this.conversationHistory.slice(-20);
+    if (skills.programmingLanguages) {
+      const langs = skills.programmingLanguages
+        .filter(l => l.proficiency === 'Expert' || l.proficiency === 'Proficient')
+        .map(l => l.language);
+      response += `• **Programming Languages:** ${langs.join(', ')}\n`;
     }
     
-    return response;
+    if (skills.frameworksAndLibraries) {
+      const frameworks = skills.frameworksAndLibraries
+        .slice(0, 8)
+        .map(f => f.name);
+      response += `• **Frameworks & Libraries:** ${frameworks.join(', ')}\n`;
+    }
+    
+    if (skills.databasesAndStorage) {
+      const databases = skills.databasesAndStorage
+        .map(db => db.name || db);
+      response += `• **Databases & Storage:** ${databases.join(', ')}\n`;
+    }
+    
+    return response.trim();
   }
-
-  getTypingDelay(response) {
-    return Math.min(200 + response.length * 2, 800);
+  
+  // Projects - check before experience
+  if (lowerQuery.includes('project') || lowerQuery.includes('built') || lowerQuery.includes('created') ||
+      lowerQuery.includes('developed') || lowerQuery.includes('portfolio')) {
+    const projects = portfolioData.technicalProjects;
+    
+    return `**Technical Projects:**\n\n` + projects.map(proj => {
+      const tech = proj.technologies.slice(0, 3).join(', ');
+      return `• **${proj.name}**\n  ${proj.description}\n  *Tech: ${tech}*`;
+    }).join('\n\n');
   }
+  
+  // Google specific
+  if (lowerQuery.includes('google')) {
+    const googleExps = portfolioData.experience.filter(exp => exp.company.includes('Google'));
+    return `**Google Experience:**\n\n` + googleExps.map(exp => {
+      const duration = `${exp.duration.start}-${exp.duration.end}`;
+      const highlights = exp.achievements || exp.responsibilities || [];
+      return `• **${exp.title}** (${duration})\n  Team: ${exp.team || 'N/A'}\n  ${highlights[0] || exp.description}`;
+    }).join('\n\n');
+  }
+  
+  // Experience - default for work-related queries
+  if (lowerQuery.includes('experience') || lowerQuery.includes('work') || lowerQuery.includes('job') ||
+      lowerQuery.includes('intern') || groupedResults.experience) {
+    const experiences = portfolioData.experience;
+    
+    return `**Professional Experience:**\n\n` + experiences.map(exp => {
+      const duration = exp.status === 'Upcoming' ? `Upcoming` : `${exp.duration.start}-${exp.duration.end}`;
+      const highlight = exp.achievements?.[0] || exp.responsibilities?.[0] || exp.description || '';
+      return `• **${exp.title}** at ${exp.company} (${duration})\n  ${highlight}`;
+    }).join('\n\n');
+  }
+  
+  // Default: Show most relevant chunks
+  if (topChunks.length > 0) {
+    const relevantData = new Set();
+    topChunks.slice(0, 3).forEach(({ chunk }) => {
+      if (chunk.data) {
+        relevantData.add(JSON.stringify(chunk.data));
+      } else if (chunk.parentData) {
+        relevantData.add(JSON.stringify(chunk.parentData));
+      }
+    });
+    
+    const items = Array.from(relevantData).map(item => JSON.parse(item));
+    return formatRelevantItems(items);
+  }
+  
+  return "I couldn't find specific information about that. Try asking about experience, projects, skills, or education.";
 }
 
-// Export singleton instance
-export const ragSystem = new OfflineRAG();
+function formatRelevantItems(items) {
+  if (items.length === 0) return "No relevant information found.";
+  
+  const formatted = items.map(item => {
+    if (item.title && item.company) {
+      // Experience
+      return `• **${item.title}** at ${item.company}`;
+    } else if (item.name && item.technologies) {
+      // Project
+      return `• **${item.name}**: ${item.description}`;
+    } else if (item.category && item.items) {
+      // Skills
+      if (item.category === 'Programming Languages') {
+        const langs = item.items.map(l => l.language).slice(0, 5);
+        return `• **${item.category}:** ${langs.join(', ')}`;
+      } else if (item.category === 'Frameworks & Libraries') {
+        const frameworks = item.items.map(f => f.name).slice(0, 5);
+        return `• **${item.category}:** ${frameworks.join(', ')}`;
+      } else {
+        return `• **${item.category}:** ${item.items.slice(0, 5).join(', ')}`;
+      }
+    } else if (item.degree) {
+      // Education
+      return `• **${item.degree}** from ${item.institution}`;
+    }
+    return JSON.stringify(item);
+  });
+  
+  return `**Relevant Information:**\n\n${formatted.join('\n')}`;
+}
+
+// Conversation memory for follow-ups
+let conversationHistory = [];
+
+export function processQuery(query) {
+  const response = generateResponse(query, conversationHistory);
+  
+  // Add to conversation history
+  conversationHistory.push({ query, response });
+  
+  // Keep only last 10 exchanges
+  if (conversationHistory.length > 10) {
+    conversationHistory = conversationHistory.slice(-10);
+  }
+  
+  return response;
+}
+
+export function clearHistory() {
+  conversationHistory = [];
+}

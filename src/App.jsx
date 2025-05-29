@@ -22,10 +22,6 @@ function App() {
     localStorage.setItem('theme', newTheme);
   };
 
-  const handleSelectMode = (selectedMode) => {
-    setMode(selectedMode);
-  };
-
   const handleBackToLanding = () => {
     setMode(null);
   };
