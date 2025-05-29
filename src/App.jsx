@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from 'react';
 import ProfessionalHeader from './components/ProfessionalHeader';
-import QuickStats from './components/QuickStats';
 import ChatInterface from './components/ChatInterface';
 import Timeline from './components/Timeline';
 import LandingPage from './components/LandingPage';
@@ -51,7 +50,6 @@ function App() {
       
       <main className="main-container">
         <div className="content-wrapper">
-          <QuickStats />
           {mode === 'chat' ? <ChatInterface /> : <Timeline />}
         </div>
       </main>
