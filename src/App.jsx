@@ -8,14 +8,12 @@ import Skills from './components/Skills';
 import Education from './components/Education';
 import Accomplishments from './components/Accomplishments';
 import Contact from './components/Contact';
-import ChatInterface from './components/ChatInterface';
 import './App.css';
 
 function App() {
   const [portfolioData, setPortfolioData] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState(null);
-  const [showChat, setShowChat] = useState(false);
 
   useEffect(() => {
     fetch('/bruce-blake-data.json')
@@ -78,22 +76,6 @@ function App() {
         <Accomplishments portfolioData={portfolioData} />
         <Contact portfolioData={portfolioData} />
       </main>
-      
-      {/* Chat Toggle Button */}
-      <button 
-        className="chat-toggle-button"
-        onClick={() => setShowChat(!showChat)}
-        aria-label={showChat ? 'Close chat' : 'Open chat'}
-      >
-        {showChat ? '✕' : '💬'}
-      </button>
-      
-      {/* Chat Interface */}
-      {showChat && (
-        <div className="chat-container">
-          <ChatInterface portfolioData={portfolioData} />
-        </div>
-      )}
     </div>
   );
 }
