@@ -8,7 +8,7 @@ const Timeline = () => {
   const [expandedItems, setExpandedItems] = useState({});
 
   useEffect(() => {
-    fetch('/bruce-blake-data.json')
+    fetch(`${import.meta.env.BASE_URL}bruce-blake-data.json`)
       .then(res => res.json())
       .then(data => setPortfolioData(data))
       .catch(err => console.error('Error loading portfolio data:', err));
