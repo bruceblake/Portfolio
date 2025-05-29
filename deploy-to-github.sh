@@ -1,0 +1,30 @@
+#!/bin/bash
+
+# Build the project
+echo "Building the project..."
+npm run build
+
+echo ""
+echo "Build complete! The 'dist' folder contains your built files."
+echo ""
+echo "To deploy to your existing Portfolio repo:"
+echo ""
+echo "1. Navigate to your Portfolio repo:"
+echo "   cd /path/to/your/Portfolio"
+echo ""
+echo "2. Remove all existing files (keeping .git):"
+echo "   git rm -rf ."
+echo "   git commit -m 'Clean repository for new portfolio'"
+echo ""
+echo "3. Copy the built files:"
+echo "   cp -r $(pwd)/dist/* /path/to/your/Portfolio/"
+echo ""
+echo "4. Commit and push:"
+echo "   cd /path/to/your/Portfolio"
+echo "   git add ."
+echo "   git commit -m 'Deploy new React portfolio'"
+echo "   git push origin main"
+echo ""
+echo "5. Your site will be live at: https://YOUR_USERNAME.github.io/Portfolio/"
+echo ""
+echo "Note: Make sure GitHub Pages is enabled in your repo settings!"
