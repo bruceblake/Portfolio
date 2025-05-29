@@ -1,7 +1,8 @@
 import '@testing-library/jest-dom'
+import { vi } from 'vitest'
 
 // Mock window.scrollTo
-global.scrollTo = jest.fn()
+global.scrollTo = vi.fn()
 
 // Mock IntersectionObserver
 global.IntersectionObserver = class IntersectionObserver {

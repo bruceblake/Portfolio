@@ -1,7 +1,7 @@
 // Offline RAG System for Portfolio
 // This implements a client-side RAG system that works entirely offline
 
-import portfolioData from '../../public/bruce-blake-data.json';
+import portfolioData from '../../public/bruce-blake-data.json' with { type: 'json' };
 
 // Chunk the portfolio data into searchable segments
 function createSearchableChunks(data) {
@@ -246,51 +246,171 @@ function searchChunks(query, chunks, topK = 5) {
 // Generate a response based on retrieved chunks
 function generateResponse(query, relevantChunks) {
   if (relevantChunks.length === 0) {
-    return "I couldn't find specific information about that in Bruce's portfolio. Try asking about his experience at Google, projects, technical skills, education, or accomplishments.";
+    return "I couldn't find specific information about that in Bruce's portfolio. Try asking about:\n\n• **Experience** at Google\n• **Projects** (3D Engine, iOS App)\n• **Technical skills**\n• **Education** at Virginia Tech\n• **Contact** information";
   }
 
   const lowerQuery = query.toLowerCase();
   
-  // Combine relevant content
-  const context = relevantChunks.map(chunk => chunk.content).join('\n\n');
-  
-  // Generate appropriate response based on query type
-  if (lowerQuery.includes('contact') || lowerQuery.includes('email') || lowerQuery.includes('reach')) {
-    const personal = relevantChunks.find(c => c.category === 'personal');
-    if (personal) {
-      return `You can reach Bruce Blake at:\n\n📧 Email: ${portfolioData.personal.email}\n📱 Phone: ${portfolioData.personal.phone}\n📍 Location: ${portfolioData.personal.location} (${portfolioData.personal.timezone})\n\nBruce is interested in: ${portfolioData.personal.interests.join(', ')}.`;
-    }
+  // Contact information
+  if (lowerQuery.includes('contact') || lowerQuery.includes('email') || lowerQuery.includes('reach') || lowerQuery.includes('phone')) {
+    return `### Contact Information\n\n📧 **Email:** ${portfolioData.personal.email}\n📱 **Phone:** ${portfolioData.personal.phone}\n📍 **Location:** ${portfolioData.personal.location} (${portfolioData.personal.timezone})\n\n**Interests:** ${portfolioData.personal.interests.slice(0, 3).join(', ')}`;
   }
 
+  // Summary/About
   if (lowerQuery.includes('summary') || lowerQuery.includes('about') || lowerQuery.includes('who is')) {
-    return context;
+    return `### About Bruce Blake\n\n${portfolioData.summary.brief}\n\n**What makes Bruce unique:**\n${portfolioData.summary.uniqueValue}`;
   }
 
-  if (lowerQuery.includes('google')) {
-    const googleExps = relevantChunks.filter(c => 
-      c.metadata.company === 'Google, Inc.' || c.content.includes('Google')
-    );
+  // Google experience
+  if (lowerQuery.includes('google') || lowerQuery.includes('step intern')) {
+    const googleExps = portfolioData.experience.filter(exp => exp.company === 'Google, Inc.');
     if (googleExps.length > 0) {
-      return `Here's Bruce's Google experience:\n\n${googleExps.map(exp => exp.content).join('\n\n')}`;
+      let response = "### Google Experience\n\n";
+      googleExps.forEach(exp => {
+        const duration = exp.status === 'Upcoming' ? `**${exp.status}** (${exp.duration.start})` : `${exp.duration.start} - ${exp.duration.end}`;
+        response += `**${exp.title}** - ${exp.team}\n*${duration}*\n\n`;
+        
+        if (exp.responsibilities) {
+          response += "**Key Achievements:**\n";
+          exp.responsibilities.slice(0, 3).forEach(resp => {
+            // Extract key metrics/highlights
+            const highlighted = resp
+              .replace(/(\d+\.?\d*[M+]? (?:million|users|monthly active users))/gi, '**$1**')
+              .replace(/(ML-powered|AI-powered|full-stack)/gi, '**$1**')
+              .replace(/(launched|created|developed|streamlined)/gi, '**$1**');
+            response += `• ${highlighted}\n`;
+          });
+        } else if (exp.anticipatedResponsibilities) {
+          response += "**Anticipated Responsibilities:**\n";
+          exp.anticipatedResponsibilities.slice(0, 2).forEach(resp => {
+            response += `• ${resp}\n`;
+          });
+        }
+        
+        response += `\n**Technologies:** ${exp.technologies.slice(0, 5).join(', ')}\n\n`;
+      });
+      return response.trim();
     }
   }
 
-  if (lowerQuery.includes('skill') || lowerQuery.includes('language') || lowerQuery.includes('technology')) {
-    const skills = relevantChunks.filter(c => c.category === 'skills');
-    if (skills.length > 0) {
-      return `Bruce's technical skills:\n\n${skills.map(s => s.content).join('\n\n')}`;
+  // Skills
+  if (lowerQuery.includes('skill') || lowerQuery.includes('language') || lowerQuery.includes('technology') || lowerQuery.includes('programming')) {
+    let response = "### Technical Skills\n\n";
+    
+    // Programming languages
+    response += "**Programming Languages:**\n";
+    const expertLangs = portfolioData.skills.programmingLanguages
+      .filter(l => l.proficiency === 'Expert')
+      .slice(0, 4);
+    expertLangs.forEach(lang => {
+      response += `• **${lang.language}** - ${lang.areas.slice(0, 2).join(', ')}\n`;
+    });
+    
+    // Key frameworks
+    response += "\n**Key Frameworks:**\n";
+    const topFrameworks = portfolioData.skills.frameworksAndLibraries
+      .filter(f => f.expertise === 'Advanced' || f.expertise === 'Proficient')
+      .slice(0, 4);
+    topFrameworks.forEach(fw => {
+      response += `• **${fw.name}** (${fw.type})\n`;
+    });
+    
+    return response.trim();
+  }
+
+  // Education
+  if (lowerQuery.includes('education') || lowerQuery.includes('school') || lowerQuery.includes('gpa') || lowerQuery.includes('virginia tech')) {
+    const edu = portfolioData.education[0];
+    return `### Education\n\n**${edu.institution}**\n*${edu.degree}*\n*Minor: ${edu.minor}*\n\n**GPA:** ${edu.gpaDetails}\n**Graduation:** ${edu.graduationDate}\n\n**Key Coursework:** ${edu.relevantCoursework.slice(0, 4).join(', ')}\n\n**Achievement:** ${edu.activitiesAndSocieties[0]} - One of only **12 teams worldwide** selected`;
+  }
+
+  // Projects
+  if (lowerQuery.includes('project') || lowerQuery.includes('built') || lowerQuery.includes('created')) {
+    let response = "### Notable Projects\n\n";
+    
+    const projects = portfolioData.technicalProjects.slice(0, 2);
+    projects.forEach(proj => {
+      response += `**${proj.name}**\n*${proj.category}*\n\n`;
+      response += `${proj.description}\n\n`;
+      response += `**Key Features:**\n`;
+      proj.technicalHighlights.slice(0, 2).forEach(highlight => {
+        const highlighted = highlight
+          .replace(/(SAT|GJK|ECS|OpenGL|MVVM|20,000\+|3D|FPS)/g, '**$1**');
+        response += `• ${highlighted}\n`;
+      });
+      response += `\n**Tech:** ${proj.technologies.slice(0, 4).join(', ')}\n\n`;
+    });
+    
+    return response.trim();
+  }
+
+  // Freelance/Red Bar Sushi
+  if (lowerQuery.includes('freelance') || lowerQuery.includes('red bar') || lowerQuery.includes('sushi')) {
+    const freelance = portfolioData.experience.find(exp => exp.company === 'Red Bar Sushi');
+    if (freelance) {
+      return `### Freelance Project - Red Bar Sushi\n\n**${freelance.title}**\n*${freelance.duration.start} - ${freelance.duration.end}*\n\n${freelance.description}\n\n**Impact:**\n${freelance.achievements.map(a => `• ${a.replace(/(\$15,000\+|600\+|upwards of)/g, '**$1**')}`).join('\n')}\n\n**Tech Stack:** ${freelance.technologies.slice(0, 5).join(', ')}`;
     }
   }
 
-  // Default: Return the most relevant content
-  const response = relevantChunks[0].content;
+  // Accomplishments
+  if (lowerQuery.includes('accomplishment') || lowerQuery.includes('achievement') || lowerQuery.includes('hackathon') || lowerQuery.includes('tunnel')) {
+    let response = "### Key Accomplishments\n\n";
+    
+    portfolioData.teamsAndAccomplishments.forEach(acc => {
+      response += `**${acc.title}**\n`;
+      if (acc.distinction) {
+        response += `*${acc.distinction.replace(/(\d+\+|1st|12 teams|400)/g, '**$1**')}*\n\n`;
+      }
+      response += `${acc.description}\n\n`;
+    });
+    
+    return response.trim();
+  }
+
+  // What makes Bruce unique / Why hire
+  if (lowerQuery.includes('unique') || lowerQuery.includes('special') || lowerQuery.includes('why hire') || lowerQuery.includes('stand out')) {
+    return `### What Makes Bruce Unique\n\n${portfolioData.summary.uniqueValue}\n\n**Key Differentiators:**\n• **2x Google intern** with impact on **2.5M+ users**\n• Built **revenue-generating** systems (**$15,000+** for Red Bar Sushi)\n• **Deep technical range**: From C++ game engines to cloud AI systems\n• **3.85 GPA** while building production systems\n• **1 of 12 teams worldwide** selected for tunnel robotics competition`;
+  }
+
+  // General experience query
+  if (lowerQuery.includes('experience') && !lowerQuery.includes('google')) {
+    let response = "### Professional Experience\n\n";
+    
+    // Show top 3 experiences
+    portfolioData.experience.slice(0, 3).forEach(exp => {
+      const duration = exp.status === 'Upcoming' 
+        ? `**${exp.status}** (${exp.duration.start})` 
+        : `${exp.duration.start} - ${exp.duration.end}`;
+      
+      response += `**${exp.title}**\n*${exp.company}${exp.team ? ` - ${exp.team}` : ''}*\n${duration}\n\n`;
+      
+      // Add key achievement or description
+      if (exp.achievements && exp.achievements.length > 0) {
+        response += `Key impact: ${exp.achievements[0].replace(/(\$\d+,?\d*\+?|[\d,]+\+? users)/g, '**$1**')}\n\n`;
+      } else {
+        response += `${exp.description.substring(0, 150)}...\n\n`;
+      }
+    });
+    
+    return response.trim();
+  }
+
+  // Default: Return formatted version of most relevant chunk
+  const topChunk = relevantChunks[0];
+  if (topChunk.category === 'experience') {
+    const exp = portfolioData.experience.find(e => topChunk.content.includes(e.company));
+    if (exp) {
+      return `### ${exp.title} at ${exp.company}\n\n*${exp.duration.start} - ${exp.duration.end}*\n\n${exp.description}\n\n**Technologies:** ${exp.technologies.join(', ')}`;
+    }
+  }
   
-  // If multiple relevant chunks, add more context
-  if (relevantChunks.length > 1) {
-    return `${response}\n\nAdditional relevant information:\n${relevantChunks.slice(1).map(c => `• ${c.content.substring(0, 200)}...`).join('\n')}`;
-  }
-
-  return response;
+  // Fallback - return content but formatted
+  const content = relevantChunks[0].content;
+  const formatted = content
+    .replace(/(\d+\.?\d*[M+]? (?:million|users|monthly|GPA))/gi, '**$1**')
+    .replace(/(Google|Virginia Tech|Red Bar Sushi)/g, '**$1**');
+  
+  return formatted;
 }
 
 // Main RAG class
