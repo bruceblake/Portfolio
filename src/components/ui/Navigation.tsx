@@ -15,7 +15,9 @@ export default function Navigation({ data }: NavigationProps) {
   const navItems = [
     { id: "hero", label: "Home" },
     { id: "experience", label: "Experience" },
+    { id: "education", label: "Education" },
     { id: "projects", label: "Projects" },
+    { id: "achievements", label: "Achievements" },
     { id: "skills", label: "Skills" },
     { id: "contact", label: "Contact" },
   ]

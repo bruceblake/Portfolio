@@ -8,11 +8,11 @@ interface SkillsProps {
   data: PortfolioData
 }
 
-// Important skills to highlight
+// Important skills to highlight (from resume)
 const HIGHLIGHT_SKILLS = [
-  'Python', 'React', 'TypeScript', 'FastAPI', 'Angular', 'Java', 
-  'Node.js', 'PostgreSQL', 'Redis', 'Docker', 'AWS', 'OpenAI API',
-  'Kubernetes', 'TensorFlow', 'PyTorch', 'Flutter', 'SwiftUI'
+  'Java', 'Python', 'TypeScript', 'Proto',
+  'React', 'Angular', 'Flask', 'FastAPI',
+  'Node.js', 'Firebase', 'Git', 'Docker', 'Linux', 'gRPC'
 ]
 
 export default function Skills({ data }: SkillsProps) {

@@ -13,7 +13,7 @@ export default function Hero({ data }: HeroProps) {
   const [currentIndex, setCurrentIndex] = useState(0)
   const [isDeleting, setIsDeleting] = useState(false)
 
-  const texts = ["Software Engineer", "Full-Stack Developer", "AI Enthusiast", "Problem Solver"]
+  const texts = ["Software Engineer", "Google Intern", "Full-Stack Developer", "Hackathon Winner"]
 
   useEffect(() => {
     const timeout = setTimeout(
@@ -85,7 +85,7 @@ export default function Hero({ data }: HeroProps) {
             animate={{ opacity: 1 }}
             transition={{ delay: 0.6 }}
           >
-            Building scalable solutions with modern tech • 2x Google Intern • AI/ML enthusiast
+            Virginia Tech Computer Engineering • 3.85 GPA • 2x Google Intern • AI/ML Enthusiast
           </motion.p>
 
           <motion.div 

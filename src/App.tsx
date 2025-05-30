@@ -2,7 +2,9 @@ import { useState, useEffect } from 'react'
 import Navigation from '@components/ui/Navigation'
 import Hero from '@components/sections/Hero'
 import Experience from '@components/sections/Experience'
+import Education from '@components/sections/Education'
 import Projects from '@components/sections/Projects'
+import Achievements from '@components/sections/Achievements'
 import Skills from '@components/sections/Skills'
 import Contact from '@components/sections/Contact'
 import Footer from '@components/layout/Footer'
@@ -51,7 +53,9 @@ export default function App() {
         <main>
           <Hero data={portfolioData} />
           <Experience data={portfolioData} />
+          <Education data={portfolioData} />
           <Projects data={portfolioData} />
+          <Achievements data={portfolioData} />
           <Skills data={portfolioData} />
           <Contact data={portfolioData} />
         </main>
