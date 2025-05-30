@@ -8,7 +8,7 @@ const Hero = ({ portfolioData }) => {
     document.getElementById('timeline')?.scrollIntoView({ behavior: 'smooth' });
   };
 
-  const primarySkills = ['TypeScript', 'React', 'Angular', 'Java', 'Python', 'Docker', 'AWS'];
+  const primarySkills = ['Python', 'Java', 'TypeScript', 'React', 'Angular', 'FastAPI', 'Docker'];
 
   return (
     <section id="hero" className="hero">
@@ -29,7 +29,7 @@ const Hero = ({ portfolioData }) => {
           </div>
           
           <p className="hero-description">
-            Full-stack engineer specializing in scalable web applications and AI integration
+            {portfolioData?.personal?.currentFocus || 'Full-stack engineer specializing in scalable web applications and AI integration'}
           </p>
           
           <div className="hero-cta">
@@ -38,13 +38,13 @@ const Hero = ({ portfolioData }) => {
           </div>
           
           <div className="hero-links">
-            <a href={`mailto:${portfolioData?.personal?.email || 'bruceblake@vt.edu'}`} className="hero-link" aria-label="Email">
+            <a href={`mailto:${portfolioData?.personal?.email || 'bruceiiiblake@gmail.com'}`} className="hero-link" aria-label="Email">
               <Mail size={20} />
             </a>
-            <a href={portfolioData?.links?.github || 'https://github.com/bruceblake'} target="_blank" rel="noopener noreferrer" className="hero-link" aria-label="GitHub">
+            <a href={portfolioData?.links?.github || 'https://github.com/yourusername'} target="_blank" rel="noopener noreferrer" className="hero-link" aria-label="GitHub">
               <Github size={20} />
             </a>
-            <a href={portfolioData?.links?.linkedin || 'https://linkedin.com/in/bruceblake'} target="_blank" rel="noopener noreferrer" className="hero-link" aria-label="LinkedIn">
+            <a href={portfolioData?.links?.linkedin || 'https://linkedin.com/in/yourprofile'} target="_blank" rel="noopener noreferrer" className="hero-link" aria-label="LinkedIn">
               <Linkedin size={20} />
             </a>
           </div>

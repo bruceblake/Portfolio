@@ -3,11 +3,11 @@ import { User, Code, Briefcase, Heart } from 'lucide-react';
 import './About.css';
 
 const About = ({ portfolioData }) => {
-  const interests = portfolioData?.interests || [
-    'Machine Learning',
-    'Cloud Computing',
-    'Open Source',
-    'Web Development'
+  const interests = portfolioData?.personal?.interests || [
+    'AI/ML Application Development',
+    'Full-Stack Web Development',
+    'Game Engine Development',
+    'Cloud Architecture & Scalable Systems'
   ];
 
   return (
@@ -32,7 +32,7 @@ const About = ({ portfolioData }) => {
                 <User className="about-icon" />
                 <div>
                   <h3>Background</h3>
-                  <p><strong>Virginia Tech CS</strong> • GPA: 3.9/4.0 • Expected May 2026</p>
+                  <p><strong>Virginia Tech Computer Engineering</strong> • In-Major GPA: 3.85/4.0 • Expected May 2026</p>
                 </div>
               </div>
               
@@ -40,7 +40,7 @@ const About = ({ portfolioData }) => {
                 <Code className="about-icon" />
                 <div>
                   <h3>Technical Focus</h3>
-                  <p><strong>Full-Stack</strong> • <strong>Cloud (AWS/GCP)</strong> • <strong>AI/ML Integration</strong></p>
+                  <p><strong>Full-Stack</strong> • <strong>AI/OpenAI APIs</strong> • <strong>Cloud (AWS/GCP)</strong> • <strong>Low-Level Systems</strong></p>
                 </div>
               </div>
               
@@ -48,7 +48,7 @@ const About = ({ portfolioData }) => {
                 <Briefcase className="about-icon" />
                 <div>
                   <h3>Experience</h3>
-                  <p><strong>2x Google SWE Intern</strong> • <strong>10+ Production Projects</strong></p>
+                  <p><strong>2x Google SWE Intern</strong> • <strong>$15K+ Revenue AI System</strong> • <strong>Hackathon Winner</strong></p>
                 </div>
               </div>
             </div>

@@ -6,7 +6,11 @@ const Skills = ({ portfolioData }) => {
   const skillsRef = useRef(null);
   const skills = portfolioData?.skills || {};
   
-  const keyTechnologies = ['TypeScript', 'React', 'Angular', 'Java', 'Python', 'FastAPI', 'Docker', 'PostgreSQL', 'Redis', 'OpenAI', 'Google', 'AWS', 'Node.js', 'C++'];
+  const keyTechnologies = [
+    'Python', 'Java', 'TypeScript', 'JavaScript', 'C++', 'Swift',
+    'FastAPI', 'React', 'Angular', 'SwiftUI', 'Node.js', 'Express',
+    'PostgreSQL', 'Redis', 'Firebase', 'Docker', 'OpenAI API', 'AWS'
+  ];
   
   const isKeyTechnology = (tech) => {
     return keyTechnologies.some(key => tech.toLowerCase().includes(key.toLowerCase()));
@@ -64,18 +68,23 @@ const Skills = ({ portfolioData }) => {
       color: 'gradient-4'
     },
     {
-      title: 'AI/ML',
+      title: 'AI/ML & APIs',
       icon: <Brain />,
-      items: skills.toolsAndPlatforms?.filter(tool => 
-        tool.category?.includes('AI')
-      ).map(tool => tool.name) || [],
+      items: [
+        ...(skills.toolsAndPlatforms?.filter(tool => 
+          tool.category?.includes('AI')
+        ).map(tool => tool.name) || []),
+        ...(skills.toolsAndPlatforms?.filter(tool => 
+          tool.category?.includes('Communications')
+        ).map(tool => tool.name) || [])
+      ],
       color: 'gradient-5'
     },
     {
-      title: 'DevOps',
+      title: 'DevOps & Cloud',
       icon: <Zap />,
       items: skills.toolsAndPlatforms?.filter(tool => 
-        ['Containerization', 'CI/CD', 'Version Control'].some(cat => tool.category?.includes(cat))
+        ['Containerization', 'CI/CD', 'Version Control', 'Cloud', 'Deployment'].some(cat => tool.category?.includes(cat))
       ).map(tool => tool.name) || [],
       color: 'gradient-6'
     }

@@ -7,8 +7,13 @@ const Timeline = ({ portfolioData }) => {
   const timelineRef = useRef(null);
   const itemRefs = useRef([]);
   
-  // Key technologies to highlight
-  const keyTechnologies = ['TypeScript', 'React', 'Angular', 'Java', 'Python', 'FastAPI', 'Docker', 'PostgreSQL', 'Redis', 'OpenAI', 'Google', 'AWS', 'Node.js', 'C++'];
+  // Key technologies to highlight - based on actual skills in data
+  const keyTechnologies = [
+    'Python', 'Java', 'TypeScript', 'JavaScript', 'C++', 'Swift',
+    'FastAPI', 'React', 'Angular', 'SwiftUI', 'Node.js', 'Express',
+    'PostgreSQL', 'Redis', 'Firebase', 'Docker', 'OpenAI API', 'Twilio API',
+    'AWS', 'Google Cloud', 'OpenGL', 'Celery'
+  ];
   
   const isKeyTechnology = (tech) => {
     return keyTechnologies.some(key => tech.toLowerCase().includes(key.toLowerCase()));
@@ -28,12 +33,13 @@ const Timeline = ({ portfolioData }) => {
           date: startDate,
           endDate: exp.duration.end === 'Present' ? new Date() : new Date(exp.duration.end),
           title: exp.title,
-          subtitle: exp.company,
+          subtitle: exp.company + (exp.team ? ` - ${exp.team}` : ''),
           location: exp.location,
           description: exp.description,
-          details: exp.responsibilities || exp.keyAchievements || exp.anticipatedResponsibilities || [],
+          details: [...(exp.achievements || []), ...(exp.responsibilities || exp.anticipatedResponsibilities || [])],
           technologies: exp.technologies || [],
-          icon: '💼'
+          icon: '💼',
+          status: exp.status
         });
       });
     }
@@ -51,7 +57,7 @@ const Timeline = ({ portfolioData }) => {
           title: edu.degree,
           subtitle: edu.institution,
           location: edu.location,
-          description: `${edu.minor ? 'Minor: ' + edu.minor + ' | ' : ''}${edu.gpaDetails || ''}`,
+          description: `${edu.minor ? 'Minor: ' + edu.minor + ' | ' : ''}${edu.gpaDetails || ''} | Dean's List`,
           details: edu.relevantCoursework || [],
           icon: '🎓'
         });
@@ -87,7 +93,25 @@ const Timeline = ({ portfolioData }) => {
       });
     }
 
-    // Removed teams and accomplishments to clean up timeline UI
+    // Add teams and accomplishments (hackathons, competitions)
+    if (portfolioData.teamsAndAccomplishments) {
+      portfolioData.teamsAndAccomplishments.forEach(team => {
+        const date = team.date ? new Date(team.date) : new Date(team.duration?.split(' - ')[0] || '2024-01-01');
+        items.push({
+          id: `team-${team.title}`,
+          type: 'achievement',
+          date: date,
+          endDate: date,
+          title: team.title,
+          subtitle: team.event || team.competition || 'Achievement',
+          description: team.description,
+          details: team.keyContributions || [],
+          technologies: team.technologies || [],
+          icon: '🏆',
+          distinction: team.distinction
+        });
+      });
+    }
 
     // Sort by date (most recent first)
     return items.sort((a, b) => b.date - a.date);
@@ -128,7 +152,8 @@ const Timeline = ({ portfolioData }) => {
     const colors = {
       experience: '#3b82f6',
       education: '#10b981',
-      project: '#8b5cf6'
+      project: '#8b5cf6',
+      achievement: '#f59e0b'
     };
     return colors[type] || '#6b7280';
   };
@@ -168,6 +193,13 @@ const Timeline = ({ portfolioData }) => {
             🚀 Projects
             <span className="filter-count">{timelineItems.filter(item => item.type === 'project').length}</span>
           </button>
+          <button 
+            className={`filter-btn ${filter === 'achievement' ? 'active' : ''}`}
+            onClick={() => setFilter('achievement')}
+          >
+            🏆 Achievements
+            <span className="filter-count">{timelineItems.filter(item => item.type === 'achievement').length}</span>
+          </button>
         </div>
 
         {/* Timeline */}
@@ -196,7 +228,10 @@ const Timeline = ({ portfolioData }) => {
                 </div>
                 
                 <div className="timeline-card">
-                  <h3 className="timeline-title">{item.title}</h3>
+                  <h3 className="timeline-title">
+                    {item.title}
+                    {item.status && <span className="status-badge">{item.status}</span>}
+                  </h3>
                   <h4 className="timeline-subtitle">{item.subtitle}</h4>
                   {item.location && <p className="timeline-location">📍 {item.location}</p>}
                   
@@ -241,6 +276,12 @@ const Timeline = ({ portfolioData }) => {
                   {item.impact && (
                     <div className="timeline-impact">
                       <strong>Impact:</strong> {item.impact}
+                    </div>
+                  )}
+                  
+                  {item.distinction && (
+                    <div className="timeline-distinction">
+                      🌟 {item.distinction}
                     </div>
                   )}
                   
