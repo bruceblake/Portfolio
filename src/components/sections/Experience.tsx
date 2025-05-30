@@ -26,7 +26,7 @@ export default function Experience({ data }: ExperienceProps) {
           {/* Timeline container */}
           <div className="relative">
             {/* Vertical timeline line */}
-            <div className="absolute left-0 md:left-8 top-0 bottom-0 w-0.5 bg-purple-300 dark:bg-purple-700"></div>
+            <div className="absolute left-0 md:left-8 top-0 bottom-0 w-1 bg-gradient-to-b from-purple-400 via-purple-500 to-purple-600 dark:from-purple-600 dark:via-purple-700 dark:to-purple-800 opacity-30"></div>
             
             {experiences.map((experience, index) => {
               const isExpanded = expandedItem === (experience.id || index.toString())
@@ -41,7 +41,12 @@ export default function Experience({ data }: ExperienceProps) {
                   className="relative flex items-start mb-8"
                 >
                   {/* Timeline dot */}
-                  <div className="absolute left-0 md:left-8 w-4 h-4 bg-purple-500 rounded-full -translate-x-1/2 z-10 ring-4 ring-white dark:ring-neutral-900"></div>
+                  <div className="absolute left-0 md:left-8 -translate-x-1/2 z-10">
+                    <div className="relative">
+                      <div className="w-5 h-5 bg-gradient-to-br from-purple-400 to-purple-600 rounded-full ring-4 ring-white dark:ring-neutral-900 shadow-lg shadow-purple-500/30"></div>
+                      <div className="absolute inset-0 w-5 h-5 bg-purple-500 rounded-full animate-ping opacity-30"></div>
+                    </div>
+                  </div>
                   
                   {/* Content card */}
                   <div className="ml-8 md:ml-20 flex-1">
@@ -54,52 +59,39 @@ export default function Experience({ data }: ExperienceProps) {
                       `}
                     >
                       {/* Compact Header - Always Visible */}
-                      <div 
-                        className="flex items-start justify-between cursor-pointer"
-                        onClick={() => toggleExpanded(experience.id || index.toString())}
-                      >
-                        <div className="flex-1">
-                          <div className="flex flex-wrap items-center gap-2 mb-2">
-                            <h3 className="text-lg font-semibold text-neutral-900 dark:text-white">
-                              {experience.position || experience.role || experience.title}
-                            </h3>
-                            <span className="text-purple-600 dark:text-purple-400 font-medium">
-                              @ {experience.company}
+                      <div>
+                        <div className="flex flex-wrap items-center gap-2 mb-2">
+                          <h3 className="text-lg font-semibold text-neutral-900 dark:text-white">
+                            {experience.position || experience.role || experience.title}
+                          </h3>
+                          <span className="text-purple-600 dark:text-purple-400 font-medium">
+                            @ {experience.company}
+                          </span>
+                          {(experience.isUpcoming || experience.status === 'Upcoming') && (
+                            <span className="px-2 py-0.5 bg-green-100 dark:bg-green-900/30 text-green-700 dark:text-green-300 text-xs font-medium rounded-full">
+                              Upcoming
                             </span>
-                            {(experience.isUpcoming || experience.status === 'Upcoming') && (
-                              <span className="px-2 py-0.5 bg-green-100 dark:bg-green-900/30 text-green-700 dark:text-green-300 text-xs font-medium rounded-full">
-                                Upcoming
-                              </span>
-                            )}
-                          </div>
-                          
-                          <div className="flex flex-wrap items-center gap-4 text-sm text-neutral-600 dark:text-neutral-400">
-                            <span className="flex items-center gap-1">
-                              <Calendar className="w-3.5 h-3.5" />
-                              {typeof experience.duration === 'string' 
-                                ? experience.duration 
-                                : `${experience.duration.start} - ${experience.duration.end}`}
-                            </span>
-                            <span className="flex items-center gap-1">
-                              <MapPin className="w-3.5 h-3.5" />
-                              {experience.location}
-                            </span>
-                            {experience.team && (
-                              <span className="flex items-center gap-1">
-                                <Building className="w-3.5 h-3.5" />
-                                {experience.team}
-                              </span>
-                            )}
-                          </div>
+                          )}
                         </div>
                         
-                        <motion.div
-                          animate={{ rotate: isExpanded ? 180 : 0 }}
-                          transition={{ duration: 0.2 }}
-                          className="ml-4 mt-1"
-                        >
-                          <ChevronDown className="w-5 h-5 text-neutral-400" />
-                        </motion.div>
+                        <div className="flex flex-wrap items-center gap-4 text-sm text-neutral-600 dark:text-neutral-400">
+                          <span className="flex items-center gap-1">
+                            <Calendar className="w-3.5 h-3.5" />
+                            {typeof experience.duration === 'string' 
+                              ? experience.duration 
+                              : `${experience.duration.start} - ${experience.duration.end}`}
+                          </span>
+                          <span className="flex items-center gap-1">
+                            <MapPin className="w-3.5 h-3.5" />
+                            {experience.location}
+                          </span>
+                          {experience.team && (
+                            <span className="flex items-center gap-1">
+                              <Building className="w-3.5 h-3.5" />
+                              {experience.team}
+                            </span>
+                          )}
+                        </div>
                       </div>
 
                       {/* Compact Description - Always Visible */}
@@ -110,6 +102,20 @@ export default function Experience({ data }: ExperienceProps) {
                           </p>
                         </div>
                       )}
+
+                      {/* More Details Button */}
+                      <button
+                        onClick={() => toggleExpanded(experience.id || index.toString())}
+                        className="mt-3 inline-flex items-center gap-2 px-4 py-2 bg-purple-100 dark:bg-purple-900/30 text-purple-700 dark:text-purple-300 rounded-lg text-sm font-medium hover:bg-purple-200 dark:hover:bg-purple-900/50 transition-all duration-200 group"
+                      >
+                        <span>{isExpanded ? 'Less details' : 'More details'}</span>
+                        <motion.div
+                          animate={{ rotate: isExpanded ? 180 : 0 }}
+                          transition={{ duration: 0.2 }}
+                        >
+                          <ChevronDown className="w-4 h-4 group-hover:translate-y-0.5 transition-transform" />
+                        </motion.div>
+                      </button>
 
                       {/* Expandable Content */}
                       <AnimatePresence>
