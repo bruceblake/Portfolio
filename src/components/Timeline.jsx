@@ -4,6 +4,7 @@ import './Timeline.css';
 const Timeline = ({ portfolioData }) => {
   const [filter, setFilter] = useState('all');
   const [visibleItems, setVisibleItems] = useState(new Set());
+  const [expandedItems, setExpandedItems] = useState(new Set());
   const timelineRef = useRef(null);
   const itemRefs = useRef([]);
   
@@ -237,16 +238,13 @@ const Timeline = ({ portfolioData }) => {
                   
                   {item.description && (
                     <p className="timeline-description">
-                      {item.description.length > 150 ? 
-                        item.description.substring(0, 150) + '...' : 
-                        item.description
-                      }
+                      {item.description}
                     </p>
                   )}
                   
                   {item.technologies && item.technologies.length > 0 && (
                     <div className="timeline-technologies">
-                      {item.technologies.slice(0, 8).map((tech, idx) => (
+                      {(expandedItems.has(item.id) ? item.technologies : item.technologies.slice(0, 5)).map((tech, idx) => (
                         <span 
                           key={idx} 
                           className={`tech-tag ${isKeyTechnology(tech) ? 'key-tech' : ''}`}
@@ -254,22 +252,25 @@ const Timeline = ({ portfolioData }) => {
                           {tech}
                         </span>
                       ))}
-                      {item.technologies.length > 8 && (
-                        <span className="tech-tag more-skills">+{item.technologies.length - 8} more</span>
-                      )}
                     </div>
                   )}
                   
-                  {item.details && item.details.length > 0 && (
-                    <ul className="timeline-details">
-                      {item.details.slice(0, 2).map((detail, idx) => (
-                        <li key={idx}>
-                          {detail.length > 100 ? detail.substring(0, 100) + '...' : detail}
-                        </li>
+                  {!expandedItems.has(item.id) && item.details && item.details.length > 0 && (
+                    <div className="timeline-overview">
+                      <h5 className="overview-title">Key Highlights:</h5>
+                      <ul className="timeline-details">
+                        {item.details.slice(0, 2).map((detail, idx) => (
+                          <li key={idx}>{detail}</li>
+                        ))}
+                      </ul>
+                    </div>
+                  )}
+                  
+                  {expandedItems.has(item.id) && item.details && item.details.length > 0 && (
+                    <ul className="timeline-details expanded">
+                      {item.details.map((detail, idx) => (
+                        <li key={idx}>{detail}</li>
                       ))}
-                      {item.details.length > 2 && (
-                        <li className="more-details">...and {item.details.length - 2} more</li>
-                      )}
                     </ul>
                   )}
                   
@@ -301,6 +302,30 @@ const Timeline = ({ portfolioData }) => {
                         </a>
                       ))}
                     </div>
+                  )}
+                  
+                  {(item.details?.length > 2 || item.technologies?.length > 5) && (
+                    <button 
+                      className={`expand-btn ${expandedItems.has(item.id) ? 'expanded' : ''}`}
+                      onClick={() => {
+                        setExpandedItems(prev => {
+                          const newSet = new Set(prev);
+                          if (newSet.has(item.id)) {
+                            newSet.delete(item.id);
+                          } else {
+                            newSet.add(item.id);
+                          }
+                          return newSet;
+                        });
+                      }}
+                    >
+                      <span className="expand-text">
+                        {expandedItems.has(item.id) ? 'Show Less' : 'View Details'}
+                      </span>
+                      <span className="expand-icon">
+                        {expandedItems.has(item.id) ? '−' : '+'}
+                      </span>
+                    </button>
                   )}
                 </div>
               </div>

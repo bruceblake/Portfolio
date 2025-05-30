@@ -1,9 +1,10 @@
-import React, { useEffect, useRef } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { Code, Database, Cloud, Wrench, Layers, Brain, Globe, Zap } from 'lucide-react';
 import './Skills.css';
 
 const Skills = ({ portfolioData }) => {
   const skillsRef = useRef(null);
+  const [expandedCategories, setExpandedCategories] = useState(new Set());
   const skills = portfolioData?.skills || {};
   
   const keyTechnologies = [
@@ -114,7 +115,7 @@ const Skills = ({ portfolioData }) => {
               </div>
               
               <div className="skill-tags">
-                {category.items.slice(0, 10).map((skill, idx) => (
+                {(expandedCategories.has(category.title) ? category.items : category.items.slice(0, 6)).map((skill, idx) => (
                   <span 
                     key={idx} 
                     className={`skill-tag ${isKeyTechnology(skill) ? 'key-skill' : ''}`}
@@ -123,10 +124,27 @@ const Skills = ({ portfolioData }) => {
                     {skill}
                   </span>
                 ))}
-                {category.items.length > 10 && (
-                  <span className="skill-tag more-skills">+{category.items.length - 10} more</span>
-                )}
               </div>
+              
+              {category.items.length > 6 && (
+                <button 
+                  className={`skill-expand-btn ${expandedCategories.has(category.title) ? 'expanded' : ''}`}
+                  onClick={() => {
+                    setExpandedCategories(prev => {
+                      const newSet = new Set(prev);
+                      if (newSet.has(category.title)) {
+                        newSet.delete(category.title);
+                      } else {
+                        newSet.add(category.title);
+                      }
+                      return newSet;
+                    });
+                  }}
+                >
+                  <span>{expandedCategories.has(category.title) ? 'Show Less' : `View All ${category.items.length} Skills`}</span>
+                  <span className="expand-arrow">{expandedCategories.has(category.title) ? '↑' : '↓'}</span>
+                </button>
+              )}
             </div>
           ))}
         </div>

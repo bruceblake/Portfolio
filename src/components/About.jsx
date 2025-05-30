@@ -18,11 +18,7 @@ const About = ({ portfolioData }) => {
         <div className="about-content">
           <div className="about-text">
             <p className="about-summary">
-              {portfolioData?.summary?.brief ? 
-                (portfolioData.summary.brief.length > 200 ? 
-                  portfolioData.summary.brief.substring(0, 200) + '...' : 
-                  portfolioData.summary.brief
-                ) : 
+              {portfolioData?.summary?.brief || 
                 'Passionate software engineer with experience in full-stack development and AI integration.'
               }
             </p>
