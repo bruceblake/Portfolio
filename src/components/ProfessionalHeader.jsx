@@ -15,7 +15,7 @@ const ProfessionalHeader = ({ portfolioData }) => {
 
   useEffect(() => {
     const handleScroll = () => {
-      const sections = ['hero', 'about', 'timeline', 'projects', 'achievements', 'skills', 'contact'];
+      const sections = ['hero', 'timeline', 'about', 'skills', 'contact'];
       const scrollPosition = window.scrollY + 100;
 
       for (const section of sections) {
@@ -52,10 +52,8 @@ const ProfessionalHeader = ({ portfolioData }) => {
 
   const navItems = [
     { id: 'hero', label: 'Home' },
+    { id: 'timeline', label: 'Timeline' },
     { id: 'about', label: 'About' },
-    { id: 'timeline', label: 'Experience' },
-    { id: 'projects', label: 'Projects' },
-    { id: 'achievements', label: 'Achievements' },
     { id: 'skills', label: 'Skills' },
     { id: 'contact', label: 'Contact' }
   ];

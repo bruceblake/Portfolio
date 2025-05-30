@@ -45,8 +45,74 @@ const Timeline = ({ portfolioData }) => {
       });
     }
 
-    // Timeline now only shows work experience
-    // Projects and achievements moved to separate sections
+    // Add education
+    if (portfolioData.education) {
+      portfolioData.education.forEach(edu => {
+        const startDate = new Date('2022-08-01'); // Default start date for education
+        const endDate = new Date('2026-05-01'); // Parse from graduationDate
+        items.push({
+          id: `edu-${edu.institution}`,
+          type: 'education',
+          date: startDate,
+          endDate: endDate,
+          title: edu.degree,
+          subtitle: edu.institution,
+          location: edu.location,
+          description: `${edu.minor ? 'Minor: ' + edu.minor + ' | ' : ''}${edu.gpaDetails || ''} | Dean's List`,
+          details: edu.relevantCoursework || [],
+          icon: '🎓'
+        });
+      });
+    }
+
+    // Add projects with estimated dates
+    if (portfolioData.technicalProjects) {
+      portfolioData.technicalProjects.forEach((proj, index) => {
+        // Estimate project dates based on context or use placeholder
+        let projectDate = new Date();
+        if (proj.name.includes('3D Physics Engine')) {
+          projectDate = new Date('2023-09-01');
+        } else if (proj.name.includes('Portfolio')) {
+          projectDate = new Date('2024-10-01');
+        } else {
+          projectDate = new Date(2024 - index, 0, 1);
+        }
+
+        items.push({
+          id: `proj-${proj.name}`,
+          type: 'project',
+          date: projectDate,
+          endDate: proj.status?.includes('Active') ? new Date() : projectDate,
+          title: proj.name,
+          subtitle: proj.category || 'Personal Project',
+          description: proj.description,
+          details: proj.technicalHighlights || [],
+          technologies: proj.technologies || [],
+          links: proj.links || {},
+          icon: '🚀'
+        });
+      });
+    }
+
+    // Add teams and accomplishments (hackathons, competitions)
+    if (portfolioData.teamsAndAccomplishments) {
+      portfolioData.teamsAndAccomplishments.forEach(team => {
+        const date = team.date ? new Date(team.date) : new Date(team.duration?.split(' - ')[0] || '2024-01-01');
+        items.push({
+          id: `team-${team.title}`,
+          type: 'achievement',
+          date: date,
+          endDate: date,
+          title: team.title,
+          subtitle: team.event || team.competition || 'Achievement',
+          description: team.description,
+          details: team.keyContributions || [],
+          technologies: team.technologies || [],
+          icon: '🏆',
+          distinction: team.distinction
+        });
+      });
+    }
 
     // Sort by date (most recent first)
     return items.sort((a, b) => b.date - a.date);
@@ -96,11 +162,45 @@ const Timeline = ({ portfolioData }) => {
   return (
     <section id="timeline" className="timeline-section">
       <div className="container">
-        <h2 className="section-title">Work Experience</h2>
+        <h2 className="section-title">Journey Timeline</h2>
         
         {/* Filter Buttons */}
         <div className="timeline-filters">
-          {/* Removed filter buttons since we only show experience */}
+          <button 
+            className={`filter-btn ${filter === 'all' ? 'active' : ''}`}
+            onClick={() => setFilter('all')}
+          >
+            All
+            <span className="filter-count">{timelineItems.length}</span>
+          </button>
+          <button 
+            className={`filter-btn ${filter === 'experience' ? 'active' : ''}`}
+            onClick={() => setFilter('experience')}
+          >
+            💼 Experience
+            <span className="filter-count">{timelineItems.filter(item => item.type === 'experience').length}</span>
+          </button>
+          <button 
+            className={`filter-btn ${filter === 'education' ? 'active' : ''}`}
+            onClick={() => setFilter('education')}
+          >
+            🎓 Education
+            <span className="filter-count">{timelineItems.filter(item => item.type === 'education').length}</span>
+          </button>
+          <button 
+            className={`filter-btn ${filter === 'project' ? 'active' : ''}`}
+            onClick={() => setFilter('project')}
+          >
+            🚀 Projects
+            <span className="filter-count">{timelineItems.filter(item => item.type === 'project').length}</span>
+          </button>
+          <button 
+            className={`filter-btn ${filter === 'achievement' ? 'active' : ''}`}
+            onClick={() => setFilter('achievement')}
+          >
+            🏆 Achievements
+            <span className="filter-count">{timelineItems.filter(item => item.type === 'achievement').length}</span>
+          </button>
         </div>
 
         {/* Timeline */}
