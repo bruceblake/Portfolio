@@ -1,0 +1,144 @@
+name: Deploy to Azure
+
+on:
+  push:
+    branches: [ main, master ]
+  pull_request:
+    branches: [ main, master ]
+  workflow_dispatch:
+
+env:
+  AZURE_WEBAPP_NAME: bruce-blake-portfolio    # set this to your application's name
+  AZURE_WEBAPP_PACKAGE_PATH: '.'              # set this to the path to your web app project, defaults to the repository root
+  NODE_VERSION: '18.x'                        # set this to the node version to use
+  AZURE_FUNCTIONAPP_NAME: portfolio-functions # set this to your function app name
+  AZURE_FUNCTIONAPP_PACKAGE_PATH: 'functions' # set this to the path to your function app project
+
+jobs:
+  build-and-deploy-webapp:
+    name: Build and Deploy Web App
+    runs-on: ubuntu-latest
+    environment:
+      name: 'production'
+      url: ${{ steps.deploy-to-webapp.outputs.webapp-url }}
+    
+    steps:
+    - name: 'Checkout GitHub Action'
+      uses: actions/checkout@v4
+
+    - name: Setup Node ${{ env.NODE_VERSION }} Environment
+      uses: actions/setup-node@v4
+      with:
+        node-version: ${{ env.NODE_VERSION }}
+        cache: 'npm'
+
+    - name: 'Install dependencies and build'
+      run: |
+        npm ci --only=production
+        npm run build --if-present
+        npm run test --if-present
+
+    - name: 'Deploy to Azure WebApp'
+      id: deploy-to-webapp
+      uses: azure/webapps-deploy@v2
+      with:
+        app-name: ${{ env.AZURE_WEBAPP_NAME }}
+        publish-profile: ${{ secrets.AZURE_WEBAPP_PUBLISH_PROFILE }}
+        package: ${{ env.AZURE_WEBAPP_PACKAGE_PATH }}
+
+  build-and-deploy-functions:
+    name: Build and Deploy Functions
+    runs-on: ubuntu-latest
+    environment:
+      name: 'production'
+    if: github.event_name == 'push' || github.event_name == 'workflow_dispatch'
+    
+    steps:
+    - name: 'Checkout GitHub Action'
+      uses: actions/checkout@v4
+
+    - name: Setup Node ${{ env.NODE_VERSION }} Environment
+      uses: actions/setup-node@v4
+      with:
+        node-version: ${{ env.NODE_VERSION }}
+
+    - name: 'Install dependencies in functions folder'
+      shell: bash
+      run: |
+        pushd './${{ env.AZURE_FUNCTIONAPP_PACKAGE_PATH }}'
+        npm install
+        npm run build --if-present
+        npm run test --if-present
+        popd
+
+    - name: 'Deploy to Azure Functions'
+      uses: Azure/functions-action@v1
+      with:
+        app-name: ${{ env.AZURE_FUNCTIONAPP_NAME }}
+        package: ${{ env.AZURE_FUNCTIONAPP_PACKAGE_PATH }}
+        publish-profile: ${{ secrets.AZURE_FUNCTIONAPP_PUBLISH_PROFILE }}
+
+  deploy-container:
+    name: Deploy to Azure Container Instances
+    runs-on: ubuntu-latest
+    environment:
+      name: 'production-container'
+    if: github.event_name == 'workflow_dispatch'
+    
+    steps:
+    - name: 'Checkout GitHub Action'
+      uses: actions/checkout@v4
+
+    - name: 'Login to Azure Container Registry'
+      uses: azure/docker-login@v1
+      with:
+        login-server: ${{ secrets.REGISTRY_LOGIN_SERVER }}
+        username: ${{ secrets.REGISTRY_USERNAME }}
+        password: ${{ secrets.REGISTRY_PASSWORD }}
+
+    - name: 'Build and push image'
+      run: |
+        docker build . -t ${{ secrets.REGISTRY_LOGIN_SERVER }}/portfolio:${{ github.sha }}
+        docker push ${{ secrets.REGISTRY_LOGIN_SERVER }}/portfolio:${{ github.sha }}
+
+    - name: 'Deploy to Azure Container Instances'
+      uses: azure/cli@v1
+      with:
+        azcliversion: latest
+        inlineScript: |
+          az container create \
+            --resource-group ${{ secrets.RESOURCE_GROUP }} \
+            --name portfolio-container \
+            --image ${{ secrets.REGISTRY_LOGIN_SERVER }}/portfolio:${{ github.sha }} \
+            --cpu 1 \
+            --memory 1 \
+            --registry-login-server ${{ secrets.REGISTRY_LOGIN_SERVER }} \
+            --registry-username ${{ secrets.REGISTRY_USERNAME }} \
+            --registry-password ${{ secrets.REGISTRY_PASSWORD }} \
+            --dns-name-label bruce-blake-portfolio \
+            --ports 3000 \
+            --environment-variables GEMINI_API_KEY=${{ secrets.GEMINI_API_KEY }}
+
+  deploy-arm-template:
+    name: Deploy using ARM Template
+    runs-on: ubuntu-latest
+    environment:
+      name: 'production-arm'
+    if: github.event_name == 'workflow_dispatch'
+    
+    steps:
+    - name: 'Checkout GitHub Action'
+      uses: actions/checkout@v4
+
+    - name: 'Login to Azure'
+      uses: azure/login@v1
+      with:
+        creds: ${{ secrets.AZURE_CREDENTIALS }}
+
+    - name: 'Deploy ARM Template'
+      uses: azure/arm-deploy@v1
+      with:
+        subscriptionId: ${{ secrets.AZURE_SUBSCRIPTION }}
+        resourceGroupName: ${{ secrets.RESOURCE_GROUP }}
+        template: ./azure-deploy.json
+        parameters: geminiApiKey=${{ secrets.GEMINI_API_KEY }}

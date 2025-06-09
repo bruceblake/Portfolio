@@ -8,64 +8,99 @@ A modern, responsive portfolio website built with React and Vite, showcasing pro
 
 - 📱 **Fully Responsive** - Optimized for all devices and screen sizes
 - 🌓 **Dark/Light Theme** - Toggle between themes with persistent preference
-- 🎨 **Modern Design** - Clean, professional UI with smooth animations
+- 🎨 **Modern Design** - Clean, professional UI with smooth animations (Framer Motion)
 - ⚡ **Fast Performance** - Built with Vite for optimal loading speed
 - 📊 **Dynamic Sections** - Experience, Projects, Skills, Education, and more
-- 🔄 **Smooth Navigation** - Scrollspy navigation with active section highlighting
+- 🔄 **Smooth Navigation** - Navigation with section highlighting
+- ✨ **Interactive Elements** - Particle background and magnetic buttons
 
 ## Tech Stack
 
-- **Frontend**: React, Vite
-- **Styling**: CSS3 with CSS Variables
+- **Frontend**: React 19, TypeScript
+- **Build Tool**: Vite 6
+- **Styling**: Tailwind CSS
+- **Animations**: Framer Motion
 - **Icons**: Lucide React
-- **Build Tool**: Vite
 - **Deployment**: GitHub Pages
 
-## Local Development
+## Quick Start
 
 ```bash
 # Install dependencies
 npm install
 
-# Start development server
+# Start development server (localhost:5173)
 npm run dev
 
 # Build for production
 npm run build
+
+# Lint code
+npm run lint
+
+# Deploy to GitHub Pages
+npm run deploy
 ```
 
 ## Project Structure
 
 ```
 src/
-├── components/          # React components
-│   ├── ProfessionalHeader # Navigation header with theme toggle
-│   ├── Hero             # Landing section with CTA
-│   ├── About            # Personal summary and interests
-│   ├── Experience       # Work experience timeline
-│   ├── Projects         # Featured and other projects
-│   ├── Skills           # Technical skills by category
-│   ├── Education        # Academic background
-│   ├── Accomplishments  # Awards and achievements
-│   └── Contact          # Contact information
-├── App.jsx              # Main app component
-├── App.css              # App-level styles
-├── index.css            # Global styles and theme variables
-└── main.jsx             # Entry point
+├── components/
+│   ├── layout/
+│   │   └── Footer.tsx           # Footer component
+│   ├── sections/
+│   │   ├── Achievements.tsx     # Awards and achievements
+│   │   ├── Contact.tsx          # Contact information
+│   │   ├── Education.tsx        # Academic background
+│   │   ├── Experience.tsx       # Work experience timeline
+│   │   ├── Hero.tsx             # Landing section
+│   │   ├── Projects.tsx         # Featured projects
+│   │   └── Skills.tsx           # Technical skills
+│   └── ui/
+│       ├── LoadingScreen.tsx    # Loading animation
+│       ├── MagneticButton.tsx   # Interactive button component
+│       ├── Navigation.tsx       # Main navigation
+│       ├── ParticleBackground.tsx # Animated background
+│       ├── ScrollProgress.tsx   # Scroll indicator
+│       └── SectionHeader.tsx    # Reusable section headers
+├── types/
+│   └── portfolio.ts             # TypeScript definitions
+├── utils/
+│   └── cn.ts                    # Utility for conditional classes
+├── App.tsx                      # Main app component
+└── main.tsx                     # Entry point
 ```
 
-## Deployment
+## Configuration
 
-The portfolio automatically deploys to GitHub Pages when you push to the `main` branch.
+- **Vite Config**: Path aliases and build settings
+- **Tailwind**: Custom theme and responsive design
+- **ESLint**: Code quality and consistency
+- **TypeScript**: Type safety and better DX
 
 ## Data
 
-Portfolio data is stored in `public/bruce-blake-data.json` and includes:
-- Personal information
+Portfolio data is dynamically loaded from `public/bruce-blake-data.json`:
+- Personal information and contact details
 - Work experience (Google internships, freelance work)
-- Projects (3D game engine, iOS apps, etc.)
-- Education (Virginia Tech)
-- Skills and technologies
+- Projects (3D game engine, iOS apps, web applications)
+- Education (Virginia Tech Computer Science)
+- Technical skills organized by category
+- Professional achievements and awards
+
+## Deployment
+
+Automated deployment to GitHub Pages via GitHub Actions:
+1. Push to `main` branch
+2. GitHub Actions builds the project
+3. Deploys to `gh-pages` branch
+4. Live at github.io URL
+
+Manual deployment:
+```bash
+npm run deploy
+```
 
 ## Contact
 

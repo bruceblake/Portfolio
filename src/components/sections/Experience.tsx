@@ -41,12 +41,12 @@ export default function Experience({ data }: ExperienceProps) {
                   {/* Content card */}
                   <div className="ml-8 md:ml-20 flex-1">
                     <div 
-                      className={`
+                      className="
                         bg-white dark:bg-neutral-800 rounded-xl p-4 md:p-6 
                         border border-neutral-200/50 dark:border-neutral-700/50 
                         hover:border-purple-500/50 transition-all duration-300
-                        ${isExpanded ? 'shadow-lg' : 'shadow-md hover:shadow-lg'}
-                      `}
+                        shadow-md hover:shadow-lg
+                      "
                     >
                       {/* Compact Header - Always Visible */}
                       <div>
