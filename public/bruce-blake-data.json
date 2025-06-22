@@ -1,14 +1,14 @@
 {
   "personal": {
     "name": "Bruce Blake",
-    "title": "TypeScript & React/Angular Developer",
+    "title": "Java, TypeScript & React/Angular Developer",
     "location": "Mountain View, CA",
     "email": "bruceiiiblake@gmail.com",
     "phone": "571-393-5615",
     "linkedIn": "LinkedIn",
     "github": "GitHub",
-    "objective": "Computer Engineering student at Virginia Tech with expertise in TypeScript, React, and Angular. Incoming 2025 Associate Software Development Intern at Google on the Play Books team.",
-    "currentFocus": "Building scalable web applications with TypeScript, React, and Angular"
+    "objective": "Computer Engineering student at Virginia Tech with expertise in Java, TypeScript, React, and Angular. Incoming 2025 Associate Software Development Intern at Google on the Play Books team.",
+    "currentFocus": "Building scalable enterprise applications with Java and modern web applications with TypeScript, React, and Angular"
   },
   "education": [
     {
