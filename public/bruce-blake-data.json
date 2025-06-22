@@ -1,0 +1,174 @@
+{
+  "personal": {
+    "name": "Bruce Blake",
+    "title": "Senior Software Engineer",
+    "location": "San Francisco, CA",
+    "email": "bruce.blake@example.com",
+    "phone": "+1 (555) 123-4567",
+    "linkedIn": "https://linkedin.com/in/bruceblake",
+    "github": "https://github.com/bruceblake",
+    "objective": "Experienced software engineer passionate about building scalable web applications and leading technical teams.",
+    "currentFocus": "Cloud-native architectures and modern web technologies"
+  },
+  "experience": [
+    {
+      "id": "1",
+      "position": "Senior Software Engineer",
+      "company": "Tech Corp",
+      "location": "San Francisco, CA",
+      "duration": "2021 - Present",
+      "description": "Leading development of cloud-native applications and mentoring junior developers.",
+      "highlights": [
+        "Architected microservices infrastructure serving 1M+ users",
+        "Reduced deployment time by 60% through CI/CD improvements",
+        "Led team of 5 engineers on critical platform migration"
+      ],
+      "technologies": ["React", "Node.js", "AWS", "Kubernetes", "TypeScript"]
+    },
+    {
+      "id": "2",
+      "position": "Software Engineer",
+      "company": "StartupXYZ",
+      "location": "San Francisco, CA",
+      "duration": "2019 - 2021",
+      "description": "Full-stack development for rapidly growing startup.",
+      "highlights": [
+        "Built core features for SaaS platform from scratch",
+        "Implemented real-time collaboration features",
+        "Optimized database queries resulting in 3x performance improvement"
+      ],
+      "technologies": ["React", "Python", "PostgreSQL", "Redis", "Docker"]
+    }
+  ],
+  "technicalProjects": [
+    {
+      "id": "1",
+      "name": "E-Commerce Platform",
+      "description": "Scalable e-commerce solution with microservices architecture",
+      "category": "Web Application",
+      "status": "Completed",
+      "technologies": ["React", "Node.js", "MongoDB", "Stripe API", "Docker"],
+      "links": {
+        "github": "https://github.com/bruceblake/ecommerce-platform",
+        "live": "https://demo-ecommerce.example.com"
+      }
+    },
+    {
+      "id": "2",
+      "name": "Real-time Analytics Dashboard",
+      "description": "Interactive dashboard for monitoring application metrics",
+      "category": "Data Visualization",
+      "status": "In Progress",
+      "technologies": ["React", "D3.js", "WebSocket", "Express", "PostgreSQL"],
+      "links": {
+        "github": "https://github.com/bruceblake/analytics-dashboard"
+      }
+    },
+    {
+      "id": "3",
+      "name": "Task Management API",
+      "description": "RESTful API for task management with authentication",
+      "category": "Backend",
+      "status": "Completed",
+      "technologies": ["Node.js", "Express", "JWT", "MongoDB", "Jest"],
+      "links": {
+        "github": "https://github.com/bruceblake/task-api"
+      }
+    }
+  ],
+  "skills": {
+    "programmingLanguages": [
+      {
+        "language": "JavaScript/TypeScript",
+        "proficiency": "Expert",
+        "areas": ["Frontend", "Backend", "Full-stack"]
+      },
+      {
+        "language": "Python",
+        "proficiency": "Advanced",
+        "areas": ["Backend", "Data Processing", "Automation"]
+      },
+      {
+        "language": "Java",
+        "proficiency": "Intermediate",
+        "areas": ["Backend", "Microservices"]
+      }
+    ],
+    "frameworksAndLibraries": [
+      {
+        "name": "React",
+        "type": "Frontend",
+        "expertise": "Expert"
+      },
+      {
+        "name": "Node.js",
+        "type": "Backend",
+        "expertise": "Expert"
+      },
+      {
+        "name": "Express",
+        "type": "Backend",
+        "expertise": "Advanced"
+      },
+      {
+        "name": "Next.js",
+        "type": "Full-stack",
+        "expertise": "Advanced"
+      },
+      {
+        "name": "Django",
+        "type": "Backend",
+        "expertise": "Intermediate"
+      }
+    ],
+    "databasesAndStorage": [
+      {
+        "name": "PostgreSQL",
+        "type": "Relational",
+        "expertise": "Advanced"
+      },
+      {
+        "name": "MongoDB",
+        "type": "NoSQL",
+        "expertise": "Advanced"
+      },
+      {
+        "name": "Redis",
+        "type": "Cache/NoSQL",
+        "expertise": "Intermediate"
+      },
+      {
+        "name": "MySQL",
+        "type": "Relational",
+        "expertise": "Intermediate"
+      }
+    ],
+    "toolsAndPlatforms": [
+      {
+        "name": "AWS",
+        "category": "Cloud",
+        "expertise": "Advanced"
+      },
+      {
+        "name": "Docker",
+        "category": "Containerization",
+        "expertise": "Advanced"
+      },
+      {
+        "name": "Kubernetes",
+        "category": "Orchestration",
+        "expertise": "Intermediate"
+      },
+      {
+        "name": "Git",
+        "category": "Version Control",
+        "expertise": "Expert"
+      },
+      {
+        "name": "Jenkins",
+        "category": "CI/CD",
+        "expertise": "Intermediate"
+      }
+    ]
+  }
+}
