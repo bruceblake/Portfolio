@@ -112,7 +112,9 @@
         "Tailwind",
         "Redux Toolkit"
       ],
-      "links": {}
+      "links": {
+        "github": "https://github.com/brucey0x"
+      }
     },
     {
       "id": "2",
@@ -121,7 +123,9 @@
       "category": "Full-stack/Finance",
       "status": "Completed",
       "technologies": ["React", "TypeScript", "Tailwind"],
-      "links": {}
+      "links": {
+        "github": "https://github.com/brucey0x"
+      }
     },
     {
       "id": "3",
@@ -130,7 +134,9 @@
       "category": "Game/Algorithm",
       "status": "Completed",
       "technologies": ["React", "TypeScript", "Vite", "Tailwind", "Firebase"],
-      "links": {}
+      "links": {
+        "github": "https://github.com/brucey0x"
+      }
     },
     {
       "id": "4",
@@ -139,7 +145,9 @@
       "category": "AI/Machine Learning",
       "status": "Completed",
       "technologies": ["React", "TypeScript", "Python"],
-      "links": {}
+      "links": {
+        "github": "https://github.com/brucey0x"
+      }
     },
     {
       "id": "5",
@@ -152,7 +160,9 @@
         "Created a 3D Physics & Game Engine as well as a game featuring role‑based gameplay with scoring and leaderboards",
         "Integrated ENet for low‑latency multiplayer networking and dynamic asset loading with Assimp and stb_image"
       ],
-      "links": {}
+      "links": {
+        "github": "https://github.com/brucey0x"
+      }
     },
     {
       "id": "6",
@@ -165,33 +175,9 @@
         "Features include authentication, friend management, groups, calendars, galleries, events, posts, pagination, location",
         "Organized codebase with 20K+ lines of code using MVVM architecture pattern"
       ],
-      "links": {}
-    },
-    {
-      "id": "7",
-      "name": "Hackathon Winner - Memegen",
-      "description": "Winner among 670+ participants at VTHacks 12th annual Hackathon. Created meme generator with 20+ templates.",
-      "category": "Hackathon",
-      "status": "Completed",
-      "technologies": ["React", "Express", "Firebase", "TypeScript"],
-      "highlights": [
-        "Winner among 670+ participants at VTHacks 12th annual Hackathon (Successfully delivered within 36 hours)",
-        "Created full CRUD operations, a responsive UI with 20+ templates and backend using Express & Firebase"
-      ],
-      "links": {}
-    },
-    {
-      "id": "8",
-      "name": "The Diggeridoos - Not-A-Boring-Competition",
-      "description": "1st team in North America to dig at Elon Musk's competition. Developed control systems and real-time GUI.",
-      "category": "Robotics",
-      "status": "Completed",
-      "technologies": ["React", "Express", "JavaScript"],
-      "highlights": [
-        "1st team in North America to dig at Elon Musk's 'Not-A-Boring-Competition' (12 of 400+)",
-        "Developed core control logic using a FSM & a GUI with dead reckoning navigation for real-time positioning & data logging"
-      ],
-      "links": {}
+      "links": {
+        "github": "https://github.com/brucey0x"
+      }
     }
   ],
   "skills": {
