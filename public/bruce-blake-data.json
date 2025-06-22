@@ -16,7 +16,7 @@
       "location": "Blacksburg, VA",
       "degree": "B.S Computer Engineering",
       "minor": "Computer Science",
-      "graduationDate": "Expected May 2025",
+      "graduationDate": "Expected May 2027",
       "gpaDetails": "GPA: 3.85/4.0",
       "coursework": [
         "Data Structures & Algorithms",
@@ -104,7 +104,14 @@
       "description": "Developed a full-stack AI image generator enabling text-to-image creation and integrated Firebase for user auth.",
       "category": "AI/Full-stack",
       "status": "Completed",
-      "technologies": ["React", "TypeScript", "Vite", "Firebase", "Tailwind", "Redux Toolkit"],
+      "technologies": [
+        "React",
+        "TypeScript",
+        "Vite",
+        "Firebase",
+        "Tailwind",
+        "Redux Toolkit"
+      ],
       "links": {}
     },
     {
