@@ -13,7 +13,7 @@ export default function Achievements({ data }: AchievementsProps) {
   if (achievements.length === 0) return null
 
   return (
-    <section id="achievements" className="py-20 lg:py-32 bg-white/50 dark:bg-neutral-900/50 backdrop-blur-sm">
+    <section id="achievements" className="py-16 lg:py-24 bg-white/50 dark:bg-neutral-900/50 backdrop-blur-sm">
       <div className="container mx-auto px-4 sm:px-6 lg:px-8">
         <SectionHeader title="Achievements & Awards" subtitle="Recognition and accomplishments" />
 

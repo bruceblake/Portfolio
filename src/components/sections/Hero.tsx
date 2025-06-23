@@ -53,103 +53,96 @@ export default function Hero({ data }: HeroProps) {
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8 }}
         >
-          <motion.h1 
-            className="text-4xl sm:text-5xl lg:text-6xl font-bold text-neutral-900 dark:text-white mb-4"
-            initial={{ opacity: 0, scale: 0.9 }}
-            animate={{ opacity: 1, scale: 1 }}
-            transition={{ delay: 0.2, duration: 0.5 }}
-          >
-            <span className="bg-gradient-to-r from-purple-600 via-purple-500 to-pink-500 bg-clip-text text-transparent">
-              {data?.personal?.name || "Bruce Blake"}
-            </span>
-          </motion.h1>
-
-          <motion.div 
-            className="text-xl sm:text-2xl text-neutral-600 dark:text-neutral-300 mb-6 h-8 flex items-center justify-center"
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ delay: 0.4 }}
-          >
-            <span>{currentText}</span>
-            <motion.span 
-              animate={{ opacity: [1, 0, 1] }}
-              transition={{ repeat: Infinity, duration: 1 }}
+          <div className="bg-white/80 dark:bg-neutral-800/80 backdrop-blur-lg rounded-3xl p-8 md:p-12 border border-purple-200/50 dark:border-purple-700/50 shadow-2xl shadow-purple-500/10">
+            <motion.h1 
+              className="text-4xl sm:text-5xl lg:text-6xl font-bold text-neutral-900 dark:text-white mb-4"
+              initial={{ opacity: 0, scale: 0.9 }}
+              animate={{ opacity: 1, scale: 1 }}
+              transition={{ delay: 0.2, duration: 0.5 }}
             >
-              |
-            </motion.span>
-          </motion.div>
-
-          <motion.p 
-            className="text-base text-neutral-600 dark:text-neutral-400 mb-8 max-w-xl mx-auto"
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ delay: 0.6 }}
-          >
-            Virginia Tech Computer Engineering • 3.85 GPA • 2x Google Intern • AI/ML Enthusiast
-          </motion.p>
-
-          <motion.div 
-            className="flex flex-wrap gap-3 justify-center items-center"
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ delay: 0.8 }}
-          >
-            <MagneticButton
-              href="#experience"
-              className="group relative px-6 py-3 bg-gradient-to-r from-purple-600 to-purple-700 hover:from-purple-700 hover:to-purple-800 text-white font-medium rounded-full transition-all duration-300 hover:shadow-xl hover:shadow-purple-500/25"
-            >
-              <span className="relative z-10 flex items-center text-sm">
-                Explore My Work
-                <ArrowRight className="w-4 h-4 ml-2 group-hover:translate-x-1 transition-transform duration-200" />
+              <span className="bg-gradient-to-r from-purple-600 via-purple-500 to-pink-500 bg-clip-text text-transparent">
+                {data?.personal?.name || "Bruce Blake"}
               </span>
-            </MagneticButton>
+            </motion.h1>
 
-            <div className="flex items-center gap-3 ml-4">
-              <motion.a
-                href={`mailto:${data?.personal?.email || "bruceiiiblake@gmail.com"}`}
-                className="p-2.5 bg-white/10 dark:bg-neutral-800/50 backdrop-blur-sm rounded-full hover:bg-purple-100 dark:hover:bg-purple-900/30 transition-all duration-200 group"
-                whileHover={{ scale: 1.1, rotate: [0, -10, 10, -10, 0] }}
-                transition={{ type: "spring", stiffness: 300 }}
+            <motion.div 
+              className="text-xl sm:text-2xl text-neutral-600 dark:text-neutral-300 mb-6 h-8 flex items-center justify-center"
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{ delay: 0.4 }}
+            >
+              <span>{currentText}</span>
+              <motion.span 
+                animate={{ opacity: [1, 0, 1] }}
+                transition={{ repeat: Infinity, duration: 1 }}
               >
-                <Mail className="w-5 h-5 text-purple-600 dark:text-purple-400 group-hover:text-purple-700 dark:group-hover:text-purple-300" />
-              </motion.a>
-              <motion.a
-                href="https://github.com/bruceblake"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="p-2.5 bg-white/10 dark:bg-neutral-800/50 backdrop-blur-sm rounded-full hover:bg-purple-100 dark:hover:bg-purple-900/30 transition-all duration-200 group"
-                whileHover={{ scale: 1.1, rotate: [0, -10, 10, -10, 0] }}
-                transition={{ type: "spring", stiffness: 300 }}
-              >
-                <Github className="w-5 h-5 text-purple-600 dark:text-purple-400 group-hover:text-purple-700 dark:group-hover:text-purple-300" />
-              </motion.a>
-              <motion.a
-                href="https://linkedin.com/in/bruceblake"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="p-2.5 bg-white/10 dark:bg-neutral-800/50 backdrop-blur-sm rounded-full hover:bg-purple-100 dark:hover:bg-purple-900/30 transition-all duration-200 group"
-                whileHover={{ scale: 1.1, rotate: [0, -10, 10, -10, 0] }}
-                transition={{ type: "spring", stiffness: 300 }}
-              >
-                <Linkedin className="w-5 h-5 text-purple-600 dark:text-purple-400 group-hover:text-purple-700 dark:group-hover:text-purple-300" />
-              </motion.a>
-            </div>
-          </motion.div>
-        </motion.div>
+                |
+              </motion.span>
+            </motion.div>
 
-        <motion.div 
-          className="absolute bottom-8 left-1/2 transform -translate-x-1/2"
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ delay: 1.2 }}
-        >
-          <motion.div 
-            className="w-6 h-10 border-2 border-purple-400 dark:border-purple-600 rounded-full flex justify-center"
-            animate={{ y: [0, 10, 0] }}
-            transition={{ repeat: Infinity, duration: 2 }}
-          >
-            <div className="w-1 h-3 bg-purple-400 dark:bg-purple-600 rounded-full mt-2"></div>
-          </motion.div>
+            <motion.p 
+              className="text-base text-neutral-600 dark:text-neutral-400 mb-8 max-w-xl mx-auto"
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{ delay: 0.6 }}
+            >
+              Java, TypeScript & React/Angular Specialist
+            </motion.p>
+
+            <motion.div
+              className="mb-8"
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{ delay: 0.7 }}
+            >
+              <div className="flex flex-wrap items-center justify-center gap-4 py-4 border-t border-b border-neutral-200/50 dark:border-neutral-700/50">
+                <a
+                  href={`mailto:${data?.personal?.email || "bruceiiiblake@gmail.com"}`}
+                  className="flex items-center gap-2 text-neutral-700 dark:text-neutral-300 hover:text-purple-600 dark:hover:text-purple-400 transition-colors group"
+                >
+                  <Mail className="w-4 h-4 text-purple-600 dark:text-purple-400" />
+                  <span className="text-sm font-medium">{data?.personal?.email || "bruceiiiblake@gmail.com"}</span>
+                </a>
+                <div className="hidden sm:block w-px h-5 bg-neutral-300 dark:bg-neutral-600"></div>
+                <a
+                  href="https://github.com/bruceblake"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="flex items-center gap-2 text-neutral-700 dark:text-neutral-300 hover:text-purple-600 dark:hover:text-purple-400 transition-colors group"
+                >
+                  <Github className="w-4 h-4 text-purple-600 dark:text-purple-400" />
+                  <span className="text-sm font-medium">GitHub</span>
+                </a>
+                <div className="hidden sm:block w-px h-5 bg-neutral-300 dark:bg-neutral-600"></div>
+                <a
+                  href="https://linkedin.com/in/bruceblake"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="flex items-center gap-2 text-neutral-700 dark:text-neutral-300 hover:text-purple-600 dark:hover:text-purple-400 transition-colors group"
+                >
+                  <Linkedin className="w-4 h-4 text-purple-600 dark:text-purple-400" />
+                  <span className="text-sm font-medium">LinkedIn</span>
+                </a>
+              </div>
+            </motion.div>
+
+            <motion.div 
+              className="flex justify-center"
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{ delay: 0.9 }}
+            >
+              <MagneticButton
+                href="#experience"
+                className="group relative px-6 py-3 bg-gradient-to-r from-purple-600 to-purple-700 hover:from-purple-700 hover:to-purple-800 text-white font-medium rounded-full transition-all duration-300 hover:shadow-xl hover:shadow-purple-500/25"
+              >
+                <span className="relative z-10 flex items-center text-sm">
+                  Explore My Work
+                  <ArrowRight className="w-4 h-4 ml-2 group-hover:translate-x-1 transition-transform duration-200" />
+                </span>
+              </MagneticButton>
+            </motion.div>
+          </div>
         </motion.div>
       </div>
     </section>

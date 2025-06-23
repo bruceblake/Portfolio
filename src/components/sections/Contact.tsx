@@ -13,7 +13,7 @@ export default function Contact({ data }: ContactProps) {
   return (
     <section
       id="contact"
-      className="py-20 lg:py-32 bg-gradient-to-br from-blue-50 to-indigo-100 dark:from-blue-950 dark:to-indigo-950"
+      className="py-16 lg:py-24 bg-gradient-to-br from-blue-50 to-indigo-100 dark:from-blue-950 dark:to-indigo-950"
     >
       <div className="container mx-auto px-4 sm:px-6 lg:px-8">
         <SectionHeader

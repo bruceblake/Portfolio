@@ -13,7 +13,7 @@ export default function Education({ data }: EducationProps) {
   if (!education) return null
 
   return (
-    <section id="education" className="py-20 lg:py-32 bg-neutral-50/50 dark:bg-neutral-950/50 backdrop-blur-sm">
+    <section id="education" className="py-16 lg:py-24 bg-neutral-50/50 dark:bg-neutral-950/50 backdrop-blur-sm">
       <div className="container mx-auto px-4 sm:px-6 lg:px-8">
         <SectionHeader title="Education" subtitle="Academic Background" />
 

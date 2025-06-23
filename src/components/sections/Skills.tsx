@@ -29,7 +29,7 @@ export default function Skills({ data }: SkillsProps) {
       icon: Smartphone,
       skills:
         data?.skills?.frameworksAndLibraries
-          ?.filter((fw) => fw.type.includes("Frontend") || fw.type.includes("Mobile"))
+          ?.filter((fw) => fw.type && (fw.type.includes("Frontend") || fw.type.includes("Mobile")))
           .map((fw) => fw.name) || [],
     },
     {
@@ -37,7 +37,7 @@ export default function Skills({ data }: SkillsProps) {
       icon: Zap,
       skills:
         data?.skills?.frameworksAndLibraries
-          ?.filter((fw) => fw.type.includes("Backend") || fw.type.includes("API"))
+          ?.filter((fw) => fw.type && (fw.type.includes("Backend") || fw.type.includes("API")))
           .map((fw) => fw.name) || [],
     },
     {
@@ -48,7 +48,7 @@ export default function Skills({ data }: SkillsProps) {
         ...(data?.skills?.toolsAndPlatforms
           ?.filter(
             (tool) =>
-              tool.category === "AI/ML" ||
+              (tool.category && tool.category === "AI/ML") ||
               tool.name.toLowerCase().includes("ai") ||
               tool.name.toLowerCase().includes("ml") ||
               tool.name.toLowerCase().includes("openai")
@@ -63,7 +63,7 @@ export default function Skills({ data }: SkillsProps) {
         data?.skills?.toolsAndPlatforms
           ?.filter(
             (tool) =>
-              !tool.category?.includes("AI/ML") &&
+              (!tool.category || !tool.category.includes("AI/ML")) &&
               !tool.name.toLowerCase().includes("ai") &&
               !tool.name.toLowerCase().includes("ml") &&
               !tool.name.toLowerCase().includes("openai")
@@ -80,7 +80,7 @@ export default function Skills({ data }: SkillsProps) {
   )
 
   return (
-    <section id="skills" className="py-20 lg:py-32 bg-white/50 dark:bg-neutral-900/50 backdrop-blur-sm relative">
+    <section id="skills" className="py-16 lg:py-24 bg-white/50 dark:bg-neutral-900/50 backdrop-blur-sm relative">
       <div className="container mx-auto px-4 sm:px-6 lg:px-8">
         <SectionHeader title="Tech Stack" subtitle="Skills that power my work" />
 

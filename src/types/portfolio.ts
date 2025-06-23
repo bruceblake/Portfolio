@@ -72,9 +72,41 @@ export interface Skills {
   toolsAndPlatforms: Tool[]
 }
 
+export interface Education {
+  institution: string
+  degree: string
+  minor?: string
+  location: string
+  graduationDate: string
+  gpaDetails: string
+  coursework?: string[]
+  honors?: string[]
+}
+
+export interface Achievement {
+  name?: string
+  title?: string
+  event?: string
+  competition?: string
+  date?: string
+  duration?: string
+  role?: string
+  distinction?: string
+  description: string
+  highlights?: string[]
+  keyContributions?: string[]
+  technologies?: string[]
+  links?: {
+    winning_post?: string
+    website?: string
+  }
+}
+
 export interface PortfolioData {
   personal: PersonalInfo
   experience: Experience[]
   technicalProjects: Project[]
   skills: Skills
+  education?: Education[]
+  teamsAndAccomplishments?: Achievement[]
 }
